@@ -3,6 +3,54 @@
 }
 
 body {
-  background: red;
-  color: white;
+  /* background: red; */
+  /* color: white; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  flex-wrap: wrap;
+  overflow: hidden;
+}
+
+.grid {
+  /* background: white; */
+  display: flex;
+  max-height: 600px;
+  min-height: 600px;
+  max-width: 600px;
+  min-width: 600px;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
+  flex-grow: 1;
+  flex-wrap: wrap;
+  height: 100%;
+  justify-content: center;
+}
+
+.grid div {
+  border: 1px black solid;
+  flex-grow: 1;
+  height: 5%;
+  width: 5%;
+}
+
+.grid div.player {
+  background-image: url(../assets/pacman.png);
+  /* background-size: contain; */
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position-x: 0;
+  background-position-y: 0;
+  flex-wrap: 0;
+}
+
+
+.pac-face-down {
+  transform: rotate(90deg)
+}
+
+.wall{
+  background: orange;
+  color: orange;
+  border: orange;
 }
