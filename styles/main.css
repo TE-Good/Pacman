@@ -45,9 +45,9 @@ body {
 }
 
 
-.pac-face-down {
+/* .pac-face-down {
   transform: rotate(90deg)
-}
+} */
 
 .wall{
   background: orange;
