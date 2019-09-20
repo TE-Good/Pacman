@@ -11,6 +11,7 @@ body {
   height: 100vh;
   flex-wrap: wrap;
   overflow: hidden;
+  flex-direction: column;
 }
 
 .grid {
@@ -32,6 +33,21 @@ body {
   flex-grow: 1;
   height: 5%;
   width: 5%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.inner {
+  
+}
+
+.pip {
+  background: gold;
+  height: 50%;
+  width: 50%;
+  border-radius: 100%;
+
 }
 
 .grid div.player {
@@ -49,8 +65,12 @@ body {
   transform: rotate(90deg)
 } */
 
-.wall{
+.wall {
   background: orange;
   color: orange;
   border: orange;
+}
+
+.score{
+  align-self: flex-end
 }
