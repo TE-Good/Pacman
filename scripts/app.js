@@ -26,7 +26,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const speed = 250
 
   //ghost 1 location
-  let ghostOneIdx = 193
+  let ghostOneIdx = 335
 
   // ghost - up left down or right
   let lastPosition = null
@@ -48,13 +48,16 @@ window.addEventListener('DOMContentLoaded', () => {
   // unstuck counter
   let duplicateGhostIdx = null
 
+  //target of ghost
+  let target = 0
+
   
 
   // grid creation
   for (let i = 0; i < width ** 2; i++) {
     const cell = document.createElement('div')
     // grid numbers
-    // cell.innerHTML = `${i}`
+    cell.innerHTML = `${i}`
     grid.appendChild(cell)
     cells.push(cell)
   }
@@ -361,22 +364,21 @@ window.addEventListener('DOMContentLoaded', () => {
   const ghostY = Math.floor(ghostOneIdx / width)
   console.log(`Ghost X:${ghostX}`, `Y:${ghostY}`)
   
-  const target = 58
-  const targetX = target % width
-  console.log(targetX)
-  const targetY = Math.floor(target / width)
-  console.log(targetY)
-  console.log(`Target X:${targetX}`, `Y:${targetY}`)
+  target = 370
+  // const targetX = target % width
+  // console.log(targetX)
+  // const targetY = Math.floor(target / width)
+  // console.log(targetY)
+  // console.log(`Target X:${targetX}`, `Y:${targetY}`)
   // horizontal or vertical
   // let lastAxis = null
   
   
   ghostToTargetMovement()
   function ghostToTargetMovement() {
-
     ghostOneTargetMove1 = setInterval(() => {
-      const xDifference = ghostXDirection(ghostOneIdx)
-      const yDifference = ghostYDirection(ghostOneIdx)
+      const xDifference = ghostXDirection(ghostOneIdx, target)
+      const yDifference = ghostYDirection(ghostOneIdx, target)
          
       switch (Math.abs(xDifference) > Math.abs(yDifference)) {
         //if x if a minus number - will need to add
@@ -420,11 +422,11 @@ window.addEventListener('DOMContentLoaded', () => {
               console.log(1, 'down')
               ghostDownByOne()
               //if not then if x is a postive number, try right
-            } else if (xDifference > 0) {
+            } else if (xDifference > 0 && ghostWallCheck('right')) {
               console.log(12)
               ghostRightByOne()
               // if not then if x is a negative number try left
-            } else if (xDifference < 0) {
+            } else if (xDifference < 0 && ghostWallCheck('left')) {
               console.log(13)
               ghostLeftByOne()
             }
@@ -436,11 +438,11 @@ window.addEventListener('DOMContentLoaded', () => {
               console.log(1, 'up')
               ghostUpByOne()
               // right
-            } else if (xDifference > 0) {
+            } else if (xDifference > 0 && ghostWallCheck('right')) {
               console.log(22)
               ghostRightByOne()
               // left
-            } else if (xDifference < 0) {
+            } else if (xDifference < 0 && ghostWallCheck('left')) {
               console.log(23)
               ghostLeftByOne()
             }
@@ -448,20 +450,37 @@ window.addEventListener('DOMContentLoaded', () => {
           break
       }
       if (lastGhostIdx === ghostOneIdx) {
-        if (lastGhostIdx === ghostOneIdx)duplicateGhostIdx++
-        if (duplicateGhostIdx === 1) console.log('changeTarget')
+        // if (lastGhostIdx === ghostOneIdx) duplicateGhostIdx++
+        // if (duplicateGhostIdx > 2) {
+        //   console.log('unstuck', target)
+          // clearInterval(ghostOneTargetMove1)
+          // randomTarget()
+          // return ghostToTargetMovement()
+        // } 
         console.log('forced')
-        if (xDifference === 0 && yDifference === 0) console.log('HURRRRRRRRAAAAY'), clearInterval(ghostOneTargetMove1)
-        else forceMove()
+        if (xDifference === 0 && yDifference === 0) {
+          console.log('targetMoved')
+          closeBox()
+          clearInterval(ghostOneTargetMove1)
+          randomTarget()
+          return ghostToTargetMovement()
+        } else forceMove(xDifference, yDifference)
       }
       lastGhostIdx = ghostOneIdx
       gameOver(ghostOneIdx)
     }, speed)
   }
 
-  function forceMove() {
-    const xDifference = ghostXDirection(ghostOneIdx)
-    const yDifference = ghostYDirection(ghostOneIdx)
+  function closeBox() {
+    cells[187].classList.add('ghost-banned')
+    ghostBanned.push(187)
+    cells[192].classList.add('ghost-banned')
+    ghostBanned.push(192)
+  }
+
+  function forceMove(xDiff, yDiff) {
+    // const xDifference = ghostXDirection(ghostOneIdx)
+    // const yDifference = ghostYDirection(ghostOneIdx)
     console.log(availableDirectionCount())
     if (availableDirectionCount() === 1) {
       if (!ghostWallCheck('up') && !ghostWallCheck('right') && !ghostWallCheck('left')){
@@ -478,18 +497,28 @@ window.addEventListener('DOMContentLoaded', () => {
         ghostUpByOne()
       }
     } else if (availableDirectionCount() === 2) {
-      if (xDifference === 0) {
+      console.log(xDiff)
+      if (xDiff === 0) {
         console.log('f21')
         if (ghostWallCheck('left')) ghostLeftByOne()
         else if (ghostWallCheck('right')) ghostRightByOne()
+      } else if (Math.abs(yDiff) > Math.abs(xDiff)) {
+        if (yDiff < 0) ghostUpByOne()
+        if (yDiff > 0) ghostDownByOne()
       }
-      if (yDifference === 0) {
+      if (yDiff === 0) {
         console.log('f22')
         if (ghostWallCheck('up')) ghostUpByOne()
         else if (ghostWallCheck('right')) ghostDownByOne()
-      } else if (Math.abs(yDifference) > Math.abs(xDifference)) {
-        if (yDifference < 0) ghostLeftByOne()
-        if (yDifference > 0) ghostRightByOne()
+      } else if (Math.abs(yDiff) > Math.abs(xDiff)) {
+        if (yDiff < 0) ghostLeftByOne()
+        if (yDiff > 0) ghostRightByOne()
+      }
+      if (xDiff === yDiff) {
+        console.log('f23')
+        const random2 = Math.ceil(Math.random() * 2)
+        if (random2 === 1) ghostUpByOne(), ghostDownByOne()
+        else ghostRightByOne(), ghostLeftByOne()
       }
     }
   }
@@ -503,12 +532,15 @@ window.addEventListener('DOMContentLoaded', () => {
     
     return wallCount
   }
-  randomTarget()
+  // randomTarget()
   function randomTarget() {
-    let random399 = Math.floor(Math.random() * 399)
-    if (pipArray.includes(random399)) return random399
-    else randomTarget()
-    console.log(random399)
+    let random399 = null
+    while (!pipArray.includes(random399)){
+      random399 = Math.floor(Math.random() * 399)
+    }
+    target = random399
+    console.log(target)
+    return target
   }
     
 
@@ -535,7 +567,8 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   //direction based upon target location
-  function ghostYDirection(ghostOneIdx){
+  function ghostYDirection(ghostOneIdx, target){
+    const targetY = Math.floor(target / width)
     //GhostY > targetY ?
     if (Math.floor(ghostOneIdx / width) > Math.floor(target / width)) {
       return targetY - Math.floor(ghostOneIdx / width)
@@ -545,7 +578,8 @@ window.addEventListener('DOMContentLoaded', () => {
     } else return 0
   }
   //direction based upon target location
-  function ghostXDirection(ghostOneIdx){
+  function ghostXDirection(ghostOneIdx, target){
+    const targetX = target % width
     //ghostX > targetX
     if ((ghostOneIdx % width) > (target % width)) {
       return targetX - (ghostOneIdx % width)
