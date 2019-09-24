@@ -47,7 +47,9 @@ body {
 }
 
 .pip {
+  /* border: 2px grey solid; */
   background: gold;
+  /* background: grey; */
   height: 50%;
   width: 50%;
   border-radius: 100%;
@@ -84,8 +86,17 @@ body {
   align-self: flex-end
 }
 
-.ghost {
+.ghost-one {
   background: pink;
+}
+.ghost-two {
+  background: aquamarine;
+}
+.ghost-three {
+  background: lightskyblue;
+}
+.ghost-four {
+  background: lightgreen;
 }
 
 .ghost-banned {

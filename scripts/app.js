@@ -25,7 +25,7 @@ window.addEventListener('DOMContentLoaded', () => {
   let points = 0
   // character speed
   // const speed = 150
-  const speed = 200
+  const speed = 150
 
   //ghost 1 location
   let ghostOneIdx = 151
@@ -71,7 +71,7 @@ window.addEventListener('DOMContentLoaded', () => {
   for (let i = 0; i < width ** 2; i++) {
     const cell = document.createElement('div')
     // grid numbers
-    cell.innerHTML = `${i}`
+    // cell.innerHTML = `${i}`
     grid.appendChild(cell)
     cells.push(cell)
   }
@@ -225,35 +225,30 @@ window.addEventListener('DOMContentLoaded', () => {
         cells[playerIdx].classList.add('rotate-down')
       }
       stageComplete(points)
-      
     }, speed)
   }
-  gameOverLoop = setInterval(() => {
-    gameOver(playerIdx, ghostOneIdx)
-  }, 10)
   
-  function gameOver(playerIdx, ghostIdx) {
-    // console.log(playerIdx)
-    // console.log(ghostOneIdx)
-    // if (playerIdx === ghostIdx) return console.log('GAME OVER'), true, clearInterval(ghostOneTargetMove1), clearInterval(setting10SecondTimer)
-    if (playerIdx === ghostIdx) {
-      console.log('GAME OVER')
-      console.log(playerIdx)
-      console.log(ghostIdx)
-      clearInterval(ghostOneTargetMove1)
-      clearInterval(setting10SecondTimer)
-      clearInterval(playerMoving)
+  gameOverLoop = setInterval(() => {
+    if (ghostOne.ghostIdx === playerIdx || ghostTwo.ghostIdx === playerIdx || 
+      ghostThree.ghostIdx === playerIdx || ghostFour.ghostIdx === playerIdx) {
       clearInterval(gameOverLoop)
-      return setTimeout(() => {
+      clearInterval(ghostOne.ghostOneTargetMove1)
+      clearInterval(ghostOne.setting10SecondTimer)
+      clearInterval(ghostTwo.ghostOneTargetMove1)
+      clearInterval(ghostTwo.setting10SecondTimer)
+      clearInterval(ghostThree.ghostOneTargetMove1)
+      clearInterval(ghostThree.setting10SecondTimer)
+      clearInterval(ghostFour.ghostOneTargetMove1)
+      clearInterval(ghostFour.setting10SecondTimer)
+      setTimeout(() => {
         grid.classList.add('hidden')
         stageOneTitle.classList.add('hidden')
         score.classList.add('hidden')
         gameOverTitle.classList.remove('hidden')
-
-      }, 1)
+        return true
+      }, 200)
     }
-  }
-
+  }, 1)
 
   function pipCount() {
     if (cells[playerIdx].children[1]){
@@ -281,464 +276,358 @@ window.addEventListener('DOMContentLoaded', () => {
     cells[charIdx].classList.remove('rotate-up')
   }
 
+  // ***********************
+  // ***********************
+  // GHOST CLASS CONSTRUCTOR
+  // ***********************
+  // ***********************
 
-  //GHOSTS
- 
-  // ***********************
-  // GHOST TARGETED MOVEMENT
-  // ***********************
-  const ghostX = ghostOneIdx % width
-  const ghostY = Math.floor(ghostOneIdx / width)
-  console.log(`Ghost X:${ghostX}`, `Y:${ghostY}`)
+  class Ghost {
+    constructor(ghostIdx, target, cssClass, speed) {
+      this.ghostIdx = ghostIdx
+      this.target = target
+      this.cssClass = cssClass
+      this.speed = speed
   
-  target = 193
-  // const targetX = target % width
-  // console.log(targetX)
-  // const targetY = Math.floor(target / width)
-  // console.log(targetY)
-  // console.log(`Target X:${targetX}`, `Y:${targetY}`)
-  // horizontal or vertical
-  // let lastAxis = null
+      this.ghostX = this.ghostIdx % width
+      this.ghostY = Math.floor(this.ghostIdx / width)
+      this.lastghostIdx = null
+      this.ghostOneTargetMove1 = null
+      this.setting10SecondTimer = null
+      this.lastPosition = null
+      this.wallCount = null
+      this.random399 = null
+    }
   
   
-  ghostToTargetMovement()
-  function ghostToTargetMovement() {
-    chasePac(ghostOneIdx, playerIdx)
-    tenSecondReassign()
-    ghostOneTargetMove1 = setInterval(() => {
-      const xDifference = ghostXDirection(ghostOneIdx, target)
-      const yDifference = ghostYDirection(ghostOneIdx, target)
-         
-      switch (Math.abs(xDifference) > Math.abs(yDifference)) {
-        //if x if a minus number - will need to add
-        // if x greater than y (therefore do X axis first)
-        case true:
-          // is x greater than 0
-          if (xDifference > 0) {
-            // if so check if I can go down
-            if (ghostWallCheck('right')) {
-              console.log(1, 'right')
-              ghostRightByOne()
-              //if not then if y is a postive number, try down
-            } else if (yDifference > 0) {
-              console.log(12)
-              ghostDownByOne()
-              // if not then if y is a negative number try right
-            } else if (yDifference < 0) {
-              console.log(13)
-              ghostUpByOne()
-            } 
-          }
-          if (xDifference < 0) {
-            if (ghostWallCheck('left')) {
-              console.log(1, 'left')
-              ghostLeftByOne()
-            } else if (yDifference > 0) {
-              console.log(22)
-              ghostDownByOne()
-            } else if (yDifference < 0) {
-              console.log(23)
-              ghostUpByOne()
+    // Main ghost movement function
+    start() {
+      this.chasePac(this.ghostIdx, playerIdx)
+      this.tenSecondReassign()
+      this.ghostOneTargetMove1 = setInterval(() => {
+        const xDifference = this.ghostXDirection(this.ghostIdx, this.target)
+        const yDifference = this.ghostYDirection(this.ghostIdx, this.target)
+
+        //function pulling the index
+        // setInterval(() => {
+        //   this.updatePlayerIdx()
+        // }, 1)
+           
+        switch (Math.abs(xDifference) > Math.abs(yDifference)) {
+          //if x if a minus number - will need to add
+          // if x greater than y (therefore do X axis first)
+          case true:
+            // is x greater than 0
+            if (xDifference > 0) {
+              // if so check if I can go down
+              if (this.ghostWallCheck('right')) {
+                // console.log(1, 'right')
+                this.ghostRightByOne()
+                //if not then if y is a postive number, try down
+              } else if (yDifference > 0) {
+                // console.log(12)
+                this.ghostDownByOne()
+                // if not then if y is a negative number try right
+              } else if (yDifference < 0) {
+                // console.log(13)
+                this.ghostUpByOne()
+              } 
             }
-          }
-          break
-        // y is greater than x (therefore do Y axis first)
-        case false:
-          // is y greater than 0
-          if (yDifference > 0) {
-            // if so check if I can go down
-            if (ghostWallCheck('down')) {
-              console.log(1, 'down')
-              ghostDownByOne()
-              //if not then if x is a postive number, try right
-            } else if (xDifference > 0 && ghostWallCheck('right')) {
-              console.log(12)
-              ghostRightByOne()
-              // if not then if x is a negative number try left
-            } else if (xDifference < 0 && ghostWallCheck('left')) {
-              console.log(13)
-              ghostLeftByOne()
+            if (xDifference < 0) {
+              if (this.ghostWallCheck('left')) {
+                // console.log(1, 'left')
+                this.ghostLeftByOne()
+              } else if (yDifference > 0) {
+                // console.log(22)
+                this.ghostDownByOne()
+              } else if (yDifference < 0) {
+                // console.log(23)
+                this.ghostUpByOne()
+              }
             }
-          }
-          // y less than 0
-          if (yDifference < 0) {
-            // up
-            if (ghostWallCheck('up')) {
-              console.log(1, 'up')
-              ghostUpByOne()
-              // right
-            } else if (xDifference > 0 && ghostWallCheck('right')) {
-              console.log(22)
-              ghostRightByOne()
-              // left
-            } else if (xDifference < 0 && ghostWallCheck('left')) {
-              console.log(23)
-              ghostLeftByOne()
+            break
+          // y is greater than x (therefore do Y axis first)
+          case false:
+            // is y greater than 0
+            if (yDifference > 0) {
+              // if so check if I can go down
+              if (this.ghostWallCheck('down')) {
+                // console.log(1, 'down')
+                this.ghostDownByOne()
+                //if not then if x is a postive number, try right
+              } else if (xDifference > 0 && this.ghostWallCheck('right')) {
+                // console.log(12)
+                this.ghostRightByOne()
+                // if not then if x is a negative number try left
+              } else if (xDifference < 0 && this.ghostWallCheck('left')) {
+                // console.log(13)
+                this.ghostLeftByOne()
+              }
             }
-          }
-          break
-      }
-      // if the ghost is in the same spot for the next loop
-      if (lastGhostIdx === ghostOneIdx) {
-        console.log('chostghost')
-        // if (lastGhostIdx === ghostOneIdx) duplicateGhostIdx++
-        // if (duplicateGhostIdx > 5) {
-        //   console.log('unstuck', target)
-        //   clearInterval(ghostOneTargetMove1)
-        //   randomTarget()
-        //   return ghostToTargetMovement()
-        // } 
+            // y less than 0
+            if (yDifference < 0) {
+              // up
+              if (this.ghostWallCheck('up')) {
+                // console.log(1, 'up')
+                this.ghostUpByOne()
+                // right
+              } else if (xDifference > 0 && this.ghostWallCheck('right')) {
+                // console.log(22)
+                this.ghostRightByOne()
+                // left
+              } else if (xDifference < 0 && this.ghostWallCheck('left')) {
+                // console.log(23)
+                this.ghostLeftByOne()
+              }
+            }
+            break
+        }
+        // if the ghost is in the same spot for the next loop
+        if (this.lastghostIdx === this.ghostIdx) {
+          // console.log('chostghost')
+          // if (this.gameOver()) return clearInterval(this.gameOver()), 0
+          // else 
+          if (xDifference === 0 && yDifference === 0) {
+            this.closeBox()
+            clearInterval(this.ghostOneTargetMove1)
+            console.log('arrived, new target')
+            this.randomTarget()
+            return this.start()
+          } else this.forceMove(xDifference, yDifference)
+        }
+        this.lastghostIdx = this.ghostIdx
         
-        if (xDifference === 0 && yDifference === 0) {
-          closeBox()
-          clearInterval(ghostOneTargetMove1)
-          console.log('arrived, new target')
-          randomTarget()
-          return ghostToTargetMovement()
-        // }  else if (duplicateGhostIdx > 5) {
-        //   console.log('unstuck', target)
-        //   clearInterval(ghostOneTargetMove1)
-        //   randomTarget()
-        //   return ghostToTargetMovement()
-        // } else if (ghostOneIdx === pipArray.indexOf(108) || ghostOneIdx === pipArray.indexOf(111)) {
-        //   clearInterval(ghostOneTargetMove1)
-        //   console.log('108 or 111, new target')
-        //   randomTarget()
-        //   return ghostToTargetMovement()
-        } else forceMove(xDifference, yDifference), console.log('forced')
-      }
-      lastGhostIdx = ghostOneIdx
+      }, this.speed)
+    }
+    
+    chasePac() {
+      const ghostY = Math.abs(Math.floor(this.ghostIdx / width))
+      const ghostX = Math.abs(this.ghostIdx % width)
+      const pacY = Math.abs(Math.floor(playerIdx / width))
+      const pacX = Math.abs(playerIdx % width)
+      let pacGhostYDifference = null
+      let pacGhostXDifference = null
+    
+      if (ghostY > pacY) {
+        pacGhostYDifference = ghostY - pacY
+      } else pacGhostYDifference = pacY - ghostY
+      if (ghostX > pacX) {
+        pacGhostXDifference = ghostX - pacX
+      } else pacGhostXDifference = pacX - ghostX
       
-    }, speed)
-  }
-
-  function chasePac(ghostIdx, playerIdx) {
-    const ghostY = Math.abs(Math.floor(ghostIdx / width))
-    const ghostX = Math.abs(ghostIdx % width)
-    const pacY = Math.abs(Math.floor(playerIdx / width))
-    const pacX = Math.abs(playerIdx % width)
-    let pacGhostYDifference = null
-    let pacGhostXDifference = null
-
-    if (ghostY > pacY) {
-      pacGhostYDifference = ghostY - pacY
-    } else pacGhostYDifference = pacY - ghostY
-    if (ghostX > pacX) {
-      pacGhostXDifference = ghostX - pacX
-    } else pacGhostXDifference = pacX - ghostX
-    
-    if (pacGhostYDifference <= 5 && pacGhostXDifference <= 5){
-      console.log('chasing')
-      return target = playerIdx
+      if (pacGhostYDifference <= 3 && pacGhostXDifference <= 3){
+        // console.log('chasing')
+        return this.target = playerIdx
+      }
     }
-  }
+    
+    tenSecondReassign() {
+      clearInterval(this.setting10SecondTimer)
+      this.setting10SecondTimer = setTimeout(() => {
+        clearInterval(this.ghostOneTargetMove1)
+        // console.log('Times up, new target')
+        this.randomTarget()
+        return this.start()
+      }, 5000)
+    }
+    
 
-  function tenSecondReassign() {
-    clearInterval(setting10SecondTimer)
-    setting10SecondTimer = setTimeout(() => {
-      clearInterval(ghostOneTargetMove1)
-      console.log('Times up, new target')
-      randomTarget()
-      return ghostToTargetMovement()
-    }, 5000)
-  }
-
-  function closeBox() {
-    cells[187].classList.add('ghost-banned')
-    ghostBanned.push(187)
-    cells[192].classList.add('ghost-banned')
-    ghostBanned.push(192)
-  }
-
-  function forceMove(xDiff, yDiff) {
-    // const xDifference = ghostXDirection(ghostOneIdx)
-    // const yDifference = ghostYDirection(ghostOneIdx)
-    console.log(availableDirectionCount())
-    if (availableDirectionCount() === 1) {
-      if (!ghostWallCheck('up') && !ghostWallCheck('right') && !ghostWallCheck('left')){
-        console.log('f11')
-        ghostDownByOne()
-      } else if (!ghostWallCheck('up') && !ghostWallCheck('down') && !ghostWallCheck('right')){
-        console.log('f12')
-        ghostLeftByOne()
-      } else if (!ghostWallCheck('up') && !ghostWallCheck('left') && !ghostWallCheck('down')){
-        console.log('f13')
-        ghostRightByOne()
-      } else if (!ghostWallCheck('right') && !ghostWallCheck('left') && !ghostWallCheck('down')){
-        console.log('f14')
-        ghostUpByOne()
+    // SORT THIS OUT
+    closeBox() {
+      console.log('close')
+      // cells[187].classList.add('ghost-banned')
+      // ghostBanned.push(187)
+      // cells[192].classList.add('ghost-banned')
+      // ghostBanned.push(192)
+    }
+    
+    forceMove(xDiff, yDiff) {
+      // console.log(this.availableDirectionCount())
+      if (this.availableDirectionCount() === 1) {
+        if (!this.ghostWallCheck('up') && !this.ghostWallCheck('right') && !this.ghostWallCheck('left')){
+          // console.log('f11')
+          this.ghostDownByOne()
+        } else if (!this.ghostWallCheck('up') && !this.ghostWallCheck('down') && !this.ghostWallCheck('right')){
+          // console.log('f12')
+          this.ghostLeftByOne()
+        } else if (!this.ghostWallCheck('up') && !this.ghostWallCheck('left') && !this.ghostWallCheck('down')){
+          // console.log('f13')
+          this.ghostRightByOne()
+        } else if (!this.ghostWallCheck('right') && !this.ghostWallCheck('left') && !this.ghostWallCheck('down')){
+          // console.log('f14')
+          this.ghostUpByOne()
+        }
+      } else if (this.availableDirectionCount() === 2) {
+        if (xDiff === 0) {
+          // console.log('f21')
+          if (this.ghostWallCheck('left')) this.ghostLeftByOne()
+          else if (this.ghostWallCheck('right')) this.ghostRightByOne()
+        } else if (Math.abs(yDiff) > Math.abs(xDiff)) {
+          if (yDiff < 0) this.ghostUpByOne()
+          if (yDiff > 0) this.ghostDownByOne()
+        }
+        if (yDiff === 0) {
+          // console.log('f22')
+          if (this.ghostWallCheck('up')) this.ghostUpByOne()
+          else if (this.ghostWallCheck('right')) this.ghostDownByOne()
+        } else if (Math.abs(yDiff) > Math.abs(xDiff)) {
+          if (yDiff < 0) this.ghostLeftByOne()
+          if (yDiff > 0) this.ghostRightByOne()
+        }
+        if (xDiff === yDiff) {
+          // console.log('f23')
+          const random2 = Math.ceil(Math.random() * 2)
+          if (random2 === 1) this.ghostUpByOne(), this.ghostDownByOne()
+          else this.ghostRightByOne(), this.ghostLeftByOne()
+        }
+      } else if (this.availableDirectionCount() === 3) {
+        // console.log('f33')
+        const random3 = Math.ceil(Math.random() * 2)
+        if (random3 === 1 && this.ghostWallCheck('up')) this.ghostUpByOne()
+        if (random3 === 1 && this.ghostWallCheck('down')) this.ghostDownByOne()
+        if (random3 === 2 && this.ghostWallCheck('right')) this.ghostRightByOne()
+        if (random3 === 2 && this.ghostWallCheck('left')) this.ghostLeftByOne()
+    
       }
-    } else if (availableDirectionCount() === 2) {
-      // console.log(xDiff)
-      if (xDiff === 0) {
-        console.log('f21')
-        if (ghostWallCheck('left')) ghostLeftByOne()
-        else if (ghostWallCheck('right')) ghostRightByOne()
-      } else if (Math.abs(yDiff) > Math.abs(xDiff)) {
-        if (yDiff < 0) ghostUpByOne()
-        if (yDiff > 0) ghostDownByOne()
+    }
+    
+    
+    
+    
+    // randomTarget()
+    randomTarget() {
+      this.random399 = null
+      while (!pipArray.includes(this.random399)){
+        this.random399 = Math.floor(Math.random() * 399)
       }
-      if (yDiff === 0) {
-        console.log('f22')
-        if (ghostWallCheck('up')) ghostUpByOne()
-        else if (ghostWallCheck('right')) ghostDownByOne()
-      } else if (Math.abs(yDiff) > Math.abs(xDiff)) {
-        if (yDiff < 0) ghostLeftByOne()
-        if (yDiff > 0) ghostRightByOne()
+      this.target = this.random399
+      console.log('target moved to', this.target)
+      return this.target
+    }
+    
+    ghostWallCheck(move) {
+      switch (move) {
+        //left
+        case 'left': 
+          if (!cells[this.ghostIdx - 1].classList.contains('wall') && !cells[this.ghostIdx - 1].classList.contains('ghost-banned')  && this.lastPosition !== 'left') return true
+          else return false
+        //down
+        case 'down':
+          if (!cells[this.ghostIdx + width].classList.contains('wall') && this.lastPosition !== 'down') return true
+          else return false
+        //right
+        case 'right':
+          if (!cells[this.ghostIdx + 1].classList.contains('wall') && !cells[this.ghostIdx + 1].classList.contains('ghost-banned')  && this.lastPosition !== 'right') return true
+          else return false
+        //up
+        case 'up':
+          if (!cells[this.ghostIdx - width].classList.contains('wall')  && this.lastPosition !== 'up') return true
+          else return false
       }
-      if (xDiff === yDiff) {
-        console.log('f23')
-        const random2 = Math.ceil(Math.random() * 2)
-        if (random2 === 1) ghostUpByOne(), ghostDownByOne()
-        else ghostRightByOne(), ghostLeftByOne()
-      }
-    } else if (availableDirectionCount() === 3) {
-      console.log('f33')
-      const random3 = Math.ceil(Math.random() * 2)
-      if (random3 === 1 && ghostWallCheck('up')) ghostUpByOne()
-      if (random3 === 1 && ghostWallCheck('down')) ghostDownByOne()
-      if (random3 === 2 && ghostWallCheck('right')) ghostRightByOne()
-      if (random3 === 2 && ghostWallCheck('left')) ghostLeftByOne()
+    }
   
+    availableDirectionCount() {
+      this.wallCount = 0
+      if (this.ghostWallCheck('up')) this.wallCount++
+      if (this.ghostWallCheck('left')) this.wallCount++
+      if (this.ghostWallCheck('down')) this.wallCount++
+      if (this.ghostWallCheck('right')) this.wallCount++
+      
+      return this.wallCount
     }
-  }
-
-
-
-  function availableDirectionCount() {
-    let wallCount = 0
-    if (ghostWallCheck('up')) wallCount++
-    if (ghostWallCheck('left')) wallCount++
-    if (ghostWallCheck('down')) wallCount++
-    if (ghostWallCheck('right')) wallCount++
     
-    return wallCount
-  }
-  // randomTarget()
-  function randomTarget() {
-    let random399 = null
-    while (!pipArray.includes(random399)){
-      random399 = Math.floor(Math.random() * 399)
+    //direction based upon this.target location
+    ghostYDirection(){
+      const targetY = Math.floor(this.target / width)
+      //GhostY > targetY ?
+      if (Math.floor(this.ghostIdx / width) > Math.floor(this.target / width)) {
+        return targetY - Math.floor(this.ghostIdx / width)
+        // ghostY < targetY ?
+      } else if (Math.floor(this.ghostIdx / width) < Math.floor(this.target / width)) {
+        return targetY - Math.floor(this.ghostIdx / width)
+      } else return 0
     }
-    target = random399
-    console.log('target moved to', target)
-    return target
-  }
+    //direction based upon this.target location
+    ghostXDirection(){
+      const targetX = this.target % width
+      //ghostX > targetX
+      if ((this.ghostIdx % width) > (this.target % width)) {
+        return targetX - (this.ghostIdx % width)
+        // targetX > ghostX
+      } else if ((this.target % width) > (this.ghostIdx % width)) {
+        return targetX - (this.ghostIdx % width)
+      } else return 0
+    }
     
+    // GHOST INDIVIDUAL MOVEMENTS
+    ghostUpByOne(clearIntervalFunctionName) {
+      this.removePreviousRotation(this.ghostIdx)
+      cells[this.ghostIdx].classList.remove(this.cssClass)
+      if (cells[this.ghostIdx - width].classList.contains('wall') || this.lastPosition === 'up') {
+        // console.log(`ghostOne index ${this.ghostIdx}`)
+        cells[this.ghostIdx].classList.add(this.cssClass)
+        return clearInterval(clearIntervalFunctionName)
+      }
+      this.ghostIdx -= width
+      this.lastPosition = 'down'
+      cells[this.ghostIdx].classList.add(this.cssClass)
+    }
+    ghostRightByOne(clearIntervalFunctionName) {
+      this.removePreviousRotation(this.ghostIdx)
+      cells[this.ghostIdx].classList.remove(this.cssClass)
+      if (cells[this.ghostIdx + 1].classList.contains('wall') || cells[this.ghostIdx + 1].classList.contains('ghost-banned') || this.lastPosition === 'right') {
+        // console.log(`ghostOne index ${this.ghostIdx}`)
+        cells[this.ghostIdx].classList.add(this.cssClass)
+        return clearInterval(clearIntervalFunctionName)
+      }
+      this.ghostIdx += 1
+      this.lastPosition = 'left'
+      if (this.ghostIdx === 199) this.ghostIdx = 180
+      cells[this.ghostIdx].classList.add(this.cssClass)
+    }
+    ghostDownByOne(clearIntervalFunctionName) {
+      this.removePreviousRotation(this.ghostIdx)
+      cells[this.ghostIdx].classList.remove(this.cssClass)
+      if (cells[this.ghostIdx + width].classList.contains('wall') || this.lastPosition === 'down') {
+        // console.log(`ghostOne index ${this.ghostIdx}`)
+        cells[this.ghostIdx].classList.add(this.cssClass)
+        return clearInterval(clearIntervalFunctionName)
+      }
+      this.ghostIdx += width
+      this.lastPosition = 'up'
+      cells[this.ghostIdx].classList.add(this.cssClass)
+    }
+    removePreviousRotation(charIdx) {
+      cells[charIdx].classList.remove('rotate-right')
+      cells[charIdx].classList.remove('rotate-down')
+      cells[charIdx].classList.remove('rotate-left')
+      cells[charIdx].classList.remove('rotate-up')
+    }
+    ghostLeftByOne(clearIntervalFunctionName) {
+      this.removePreviousRotation(this.ghostIdx)
+      cells[this.ghostIdx].classList.remove(this.cssClass)
+      if (cells[this.ghostIdx - 1].classList.contains('wall') || cells[this.ghostIdx - 1].classList.contains('ghost-banned') || this.lastPosition === 'left') {
+        // console.log(`ghostOne index ${this.ghostIdx}`)
+        cells[this.ghostIdx].classList.add(this.cssClass)
+        return clearInterval(clearIntervalFunctionName)
+      }
+      this.ghostIdx -= 1
+      this.lastPosition = 'right'
+      if (this.ghostIdx === 180) this.ghostIdx = 199
+      cells[this.ghostIdx].classList.add(this.cssClass)
+    }
+    
+  } // END OF CLASS
+  
+  const ghostOne = new Ghost(150, 193, 'ghost-one', speed)
+  const ghostTwo = new Ghost(148, 186, 'ghost-two', speed)
+  const ghostThree = new Ghost(209, 344, 'ghost-three', speed)
+  const ghostFour = new Ghost(209,  186, 'ghost-four', speed)
+  ghostOne.start()
+  ghostTwo.start()
+  ghostThree.start()
+  ghostFour.start()
 
   
-  function ghostWallCheck(move) {
-    switch (move) {
-      //left
-      case 'left': 
-        if (!cells[ghostOneIdx - 1].classList.contains('wall') && !cells[ghostOneIdx - 1].classList.contains('ghost-banned')  && lastPosition !== 'left') return true
-        else return false
-      //down
-      case 'down':
-        if (!cells[ghostOneIdx + width].classList.contains('wall') && lastPosition !== 'down') return true
-        else return false
-      //right
-      case 'right':
-        if (!cells[ghostOneIdx + 1].classList.contains('wall') && !cells[ghostOneIdx + 1].classList.contains('ghost-banned')  && lastPosition !== 'right') return true
-        else return false
-      //up
-      case 'up':
-        if (!cells[ghostOneIdx - width].classList.contains('wall')  && lastPosition !== 'up') return true
-        else return false
-    }
-  }
 
-  //direction based upon target location
-  function ghostYDirection(ghostOneIdx, target){
-    const targetY = Math.floor(target / width)
-    //GhostY > targetY ?
-    if (Math.floor(ghostOneIdx / width) > Math.floor(target / width)) {
-      return targetY - Math.floor(ghostOneIdx / width)
-      // ghostY < targetY ?
-    } else if (Math.floor(ghostOneIdx / width) < Math.floor(target / width)) {
-      return targetY - Math.floor(ghostOneIdx / width)
-    } else return 0
-  }
-  //direction based upon target location
-  function ghostXDirection(ghostOneIdx, target){
-    const targetX = target % width
-    //ghostX > targetX
-    if ((ghostOneIdx % width) > (target % width)) {
-      return targetX - (ghostOneIdx % width)
-      // targetX > ghostX
-    } else if ((target % width) > (ghostOneIdx % width)) {
-      return targetX - (ghostOneIdx % width)
-    } else return 0
-  }
-
-  // GHOST INDIVIDUAL MOVEMENTS
-  function ghostUpByOne(clearIntervalFunctionName) {
-    removePreviousRotation(ghostOneIdx)
-    cells[ghostOneIdx].classList.remove('ghost')
-    if (cells[ghostOneIdx - width].classList.contains('wall') || lastPosition === 'up') {
-      console.log(`ghostOne index ${ghostOneIdx}`)
-      cells[ghostOneIdx].classList.add('ghost')
-      return clearInterval(clearIntervalFunctionName)
-    }
-    ghostOneIdx -= width
-    lastPosition = 'down'
-    cells[ghostOneIdx].classList.add('ghost')
-  }
-  function ghostRightByOne(clearIntervalFunctionName) {
-    removePreviousRotation(ghostOneIdx)
-    cells[ghostOneIdx].classList.remove('ghost')
-    if (cells[ghostOneIdx + 1].classList.contains('wall') || cells[ghostOneIdx + 1].classList.contains('ghost-banned') || lastPosition === 'right') {
-      console.log(`ghostOne index ${ghostOneIdx}`)
-      cells[ghostOneIdx].classList.add('ghost')
-      return clearInterval(clearIntervalFunctionName)
-    }
-    ghostOneIdx += 1
-    lastPosition = 'left'
-    if (ghostOneIdx === 199) ghostOneIdx = 180
-    cells[ghostOneIdx].classList.add('ghost')
-  }
-  function ghostDownByOne(clearIntervalFunctionName) {
-    removePreviousRotation(ghostOneIdx)
-    cells[ghostOneIdx].classList.remove('ghost')
-    if (cells[ghostOneIdx + width].classList.contains('wall') || lastPosition === 'down') {
-      console.log(`ghostOne index ${ghostOneIdx}`)
-      cells[ghostOneIdx].classList.add('ghost')
-      return clearInterval(clearIntervalFunctionName)
-    }
-    ghostOneIdx += width
-    lastPosition = 'up'
-    cells[ghostOneIdx].classList.add('ghost')
-  }
-  function ghostLeftByOne(clearIntervalFunctionName) {
-    removePreviousRotation(ghostOneIdx)
-    cells[ghostOneIdx].classList.remove('ghost')
-    if (cells[ghostOneIdx - 1].classList.contains('wall') || cells[ghostOneIdx - 1].classList.contains('ghost-banned') || lastPosition === 'left') {
-      console.log(`ghostOne index ${ghostOneIdx}`)
-      cells[ghostOneIdx].classList.add('ghost')
-      return clearInterval(clearIntervalFunctionName)
-    }
-    ghostOneIdx -= 1
-    lastPosition = 'right'
-    if (ghostOneIdx === 180) ghostOneIdx = 199
-    cells[ghostOneIdx].classList.add('ghost')
-  }
-
-
-
-
-  //if playerIdx === any ghost index trigger game over
 }) // END OF DOMContentLoaded
-
-
-
-
-
-
-// ***************************
-// GHOST TOTAL RANDOM MOVEMENT
-// ***************************
-
-//ghost movement
-// function movementGhost(keyCode, characterClass) {
-
-//   //clearing previous movement
-//   clearInterval(ghostOneMoving)
-//   //loop
-//   ghostOneMoving = setInterval(() => {
-    
-  
-//     // moving left
-//     if (keyCode === 37) {
-//       console.log(`ghostOne index ${ghostOneIdx}`)
-//       //removing pips and accumalating points
-//       pipCount()
-//       //removing preivous rotation class
-//       removePreviousRotation(ghostOneIdx)
-//       //remove pacman
-//       cells[ghostOneIdx].classList.remove(characterClass)
-//       // if a wall ahead
-//       if (cells[ghostOneIdx - 1].classList.contains('wall')) {
-//         //add pacman
-//         cells[ghostOneIdx].classList.add(characterClass)
-//         // rotating div
-//         // cells[ghostIdx].classList.add('rotate-left')
-//         // stop loop
-//         return clearInterval(ghostOneMoving)
-//       }
-//       //move pacman left by 1
-//       ghostOneIdx -= 1
-//       //if at middle opening, loop to opposite side
-//       if (ghostOneIdx === 180) ghostOneIdx = 199
-//       // add pacman
-//       cells[ghostOneIdx].classList.add(characterClass)
-//       // rotating div
-//       // cells[ghostIdx].classList.add('rotate-left')
-//     }
-
-//     // moving right
-//     if (keyCode === 39) {
-//       console.log(`ghostOne index ${ghostOneIdx}`)
-//       pipCount()
-//       removePreviousRotation(ghostOneIdx)
-//       cells[ghostOneIdx].classList.remove(characterClass)
-//       if (cells[ghostOneIdx + 1].classList.contains('wall')) {
-//         cells[ghostOneIdx].classList.add(characterClass)
-//         // cells[ghostIdx].classList.add('rotate-right')
-//         return clearInterval(ghostOneMoving)
-//       }
-//       ghostOneIdx += 1
-//       if (ghostOneIdx === 199) ghostOneIdx = 180
-//       cells[ghostOneIdx].classList.add(characterClass)
-//       // cells[ghostIdx].classList.add('rotate-right')
-//     }
-
-//     //moving up
-//     if (keyCode === 38) {
-//       console.log(`ghostOne index ${ghostOneIdx}`)
-//       pipCount()
-//       removePreviousRotation(ghostOneIdx)
-//       cells[ghostOneIdx].classList.remove(characterClass)
-//       if (cells[ghostOneIdx - width].classList.contains('wall')) {
-//         cells[ghostOneIdx].classList.add(characterClass)
-//         // cells[ghostIdx].classList.add('rotate-up')
-//         return clearInterval(ghostOneMoving)
-//       }
-//       ghostOneIdx -= width
-//       cells[ghostOneIdx].classList.add(characterClass)
-//       // cells[ghostIdx].classList.add('rotate-up')
-//     }
-//     //moving down
-//     if (keyCode === 40) {
-//       console.log(`ghostOne index ${ghostOneIdx}`)
-//       pipCount()
-//       removePreviousRotation(ghostOneIdx)
-//       cells[ghostOneIdx].classList.remove(characterClass)
-//       if (cells[ghostOneIdx + width].classList.contains('wall')) {
-//         cells[ghostOneIdx].classList.add(characterClass)
-//         // cells[ghostIdx].classList.add('rotate-down')
-//         return clearInterval(ghostOneMoving)
-//       }
-//       ghostOneIdx += width
-//       cells[ghostOneIdx].classList.add(characterClass)
-//       // cells[ghostIdx].classList.add('rotate-down')
-//     }
-//     // stageComplete(points)
-//   }, speed)
-
-// }
-
-// ghostOneBehaviour()
-// function ghostOneBehaviour(){
-//   setInterval(() => {
-//     const key = keyGenerator()
-//     console.log(key)
-//     movementGhost(key , 'ghost', ghostOneIdx)
-//   }, 500)
-  
-// }
-
-// function keyGenerator() {
-//   const randomFour = Math.floor(Math.random() * 4)
-//   return randomFour + 37
-// }
-
