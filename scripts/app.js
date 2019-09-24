@@ -9,6 +9,8 @@ window.addEventListener('DOMContentLoaded', () => {
   const width = 20
   const grid = document.querySelector('.grid')
   const score = document.querySelector('.score')
+  const gameOverTitle = document.querySelector('.game-over')
+  const stageOneTitle = document.querySelector('.stage-one')
   const cells = []
   // inital character placement (array index)
   let playerIdx = 290
@@ -23,10 +25,10 @@ window.addEventListener('DOMContentLoaded', () => {
   let points = 0
   // character speed
   // const speed = 150
-  const speed = 250
+  const speed = 200
 
   //ghost 1 location
-  let ghostOneIdx = 335
+  let ghostOneIdx = 151
 
   // ghost - up left down or right
   let lastPosition = null
@@ -50,6 +52,18 @@ window.addEventListener('DOMContentLoaded', () => {
 
   //target of ghost
   let target = 0
+
+  //10 seconds clear timer for ghost reassignment
+  let setting10SecondTimer = null
+
+  //gameOver Interval timer
+  let gameOverLoop = null
+
+  //game state
+  // let 
+
+  // chasing loop
+  // let canIChase = null
 
   
 
@@ -127,6 +141,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }) //END OF EVENT LISTENER
 
   function movementPlayer(keyCode, characterClass) {
+    // gameOver(playerIdx, ghostOneIdx)
 
     //clearing previous movement
     clearInterval(playerMoving)
@@ -210,13 +225,33 @@ window.addEventListener('DOMContentLoaded', () => {
         cells[playerIdx].classList.add('rotate-down')
       }
       stageComplete(points)
-      gameOver(ghostOneIdx)
       
     }, speed)
   }
+  gameOverLoop = setInterval(() => {
+    gameOver(playerIdx, ghostOneIdx)
+  }, 10)
+  
+  function gameOver(playerIdx, ghostIdx) {
+    // console.log(playerIdx)
+    // console.log(ghostOneIdx)
+    // if (playerIdx === ghostIdx) return console.log('GAME OVER'), true, clearInterval(ghostOneTargetMove1), clearInterval(setting10SecondTimer)
+    if (playerIdx === ghostIdx) {
+      console.log('GAME OVER')
+      console.log(playerIdx)
+      console.log(ghostIdx)
+      clearInterval(ghostOneTargetMove1)
+      clearInterval(setting10SecondTimer)
+      clearInterval(playerMoving)
+      clearInterval(gameOverLoop)
+      return setTimeout(() => {
+        grid.classList.add('hidden')
+        stageOneTitle.classList.add('hidden')
+        score.classList.add('hidden')
+        gameOverTitle.classList.remove('hidden')
 
-  function gameOver(ghostIdx) {
-    if (playerIdx === ghostIdx) console.log('GAME OVER')
+      }, 1)
+    }
   }
 
 
@@ -248,115 +283,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
   //GHOSTS
-  // ***************************
-  // GHOST TOTAL RANDOM MOVEMENT
-  // ***************************
-
-  //ghost movement
-  // function movementGhost(keyCode, characterClass) {
-
-  //   //clearing previous movement
-  //   clearInterval(ghostOneMoving)
-  //   //loop
-  //   ghostOneMoving = setInterval(() => {
-      
-    
-  //     // moving left
-  //     if (keyCode === 37) {
-  //       console.log(`ghostOne index ${ghostOneIdx}`)
-  //       //removing pips and accumalating points
-  //       pipCount()
-  //       //removing preivous rotation class
-  //       removePreviousRotation(ghostOneIdx)
-  //       //remove pacman
-  //       cells[ghostOneIdx].classList.remove(characterClass)
-  //       // if a wall ahead
-  //       if (cells[ghostOneIdx - 1].classList.contains('wall')) {
-  //         //add pacman
-  //         cells[ghostOneIdx].classList.add(characterClass)
-  //         // rotating div
-  //         // cells[ghostIdx].classList.add('rotate-left')
-  //         // stop loop
-  //         return clearInterval(ghostOneMoving)
-  //       }
-  //       //move pacman left by 1
-  //       ghostOneIdx -= 1
-  //       //if at middle opening, loop to opposite side
-  //       if (ghostOneIdx === 180) ghostOneIdx = 199
-  //       // add pacman
-  //       cells[ghostOneIdx].classList.add(characterClass)
-  //       // rotating div
-  //       // cells[ghostIdx].classList.add('rotate-left')
-  //     }
-
-  //     // moving right
-  //     if (keyCode === 39) {
-  //       console.log(`ghostOne index ${ghostOneIdx}`)
-  //       pipCount()
-  //       removePreviousRotation(ghostOneIdx)
-  //       cells[ghostOneIdx].classList.remove(characterClass)
-  //       if (cells[ghostOneIdx + 1].classList.contains('wall')) {
-  //         cells[ghostOneIdx].classList.add(characterClass)
-  //         // cells[ghostIdx].classList.add('rotate-right')
-  //         return clearInterval(ghostOneMoving)
-  //       }
-  //       ghostOneIdx += 1
-  //       if (ghostOneIdx === 199) ghostOneIdx = 180
-  //       cells[ghostOneIdx].classList.add(characterClass)
-  //       // cells[ghostIdx].classList.add('rotate-right')
-  //     }
-
-  //     //moving up
-  //     if (keyCode === 38) {
-  //       console.log(`ghostOne index ${ghostOneIdx}`)
-  //       pipCount()
-  //       removePreviousRotation(ghostOneIdx)
-  //       cells[ghostOneIdx].classList.remove(characterClass)
-  //       if (cells[ghostOneIdx - width].classList.contains('wall')) {
-  //         cells[ghostOneIdx].classList.add(characterClass)
-  //         // cells[ghostIdx].classList.add('rotate-up')
-  //         return clearInterval(ghostOneMoving)
-  //       }
-  //       ghostOneIdx -= width
-  //       cells[ghostOneIdx].classList.add(characterClass)
-  //       // cells[ghostIdx].classList.add('rotate-up')
-  //     }
-  //     //moving down
-  //     if (keyCode === 40) {
-  //       console.log(`ghostOne index ${ghostOneIdx}`)
-  //       pipCount()
-  //       removePreviousRotation(ghostOneIdx)
-  //       cells[ghostOneIdx].classList.remove(characterClass)
-  //       if (cells[ghostOneIdx + width].classList.contains('wall')) {
-  //         cells[ghostOneIdx].classList.add(characterClass)
-  //         // cells[ghostIdx].classList.add('rotate-down')
-  //         return clearInterval(ghostOneMoving)
-  //       }
-  //       ghostOneIdx += width
-  //       cells[ghostOneIdx].classList.add(characterClass)
-  //       // cells[ghostIdx].classList.add('rotate-down')
-  //     }
-  //     // stageComplete(points)
-  //   }, speed)
-
-  // }
-
-  // ghostOneBehaviour()
-  // function ghostOneBehaviour(){
-  //   setInterval(() => {
-  //     const key = keyGenerator()
-  //     console.log(key)
-  //     movementGhost(key , 'ghost', ghostOneIdx)
-  //   }, 500)
-    
-  // }
-
-  // function keyGenerator() {
-  //   const randomFour = Math.floor(Math.random() * 4)
-  //   return randomFour + 37
-  // }
-
-
+ 
   // ***********************
   // GHOST TARGETED MOVEMENT
   // ***********************
@@ -364,7 +291,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const ghostY = Math.floor(ghostOneIdx / width)
   console.log(`Ghost X:${ghostX}`, `Y:${ghostY}`)
   
-  target = 370
+  target = 193
   // const targetX = target % width
   // console.log(targetX)
   // const targetY = Math.floor(target / width)
@@ -376,6 +303,8 @@ window.addEventListener('DOMContentLoaded', () => {
   
   ghostToTargetMovement()
   function ghostToTargetMovement() {
+    chasePac(ghostOneIdx, playerIdx)
+    tenSecondReassign()
     ghostOneTargetMove1 = setInterval(() => {
       const xDifference = ghostXDirection(ghostOneIdx, target)
       const yDifference = ghostYDirection(ghostOneIdx, target)
@@ -449,26 +378,69 @@ window.addEventListener('DOMContentLoaded', () => {
           }
           break
       }
+      // if the ghost is in the same spot for the next loop
       if (lastGhostIdx === ghostOneIdx) {
+        console.log('chostghost')
         // if (lastGhostIdx === ghostOneIdx) duplicateGhostIdx++
-        // if (duplicateGhostIdx > 2) {
+        // if (duplicateGhostIdx > 5) {
         //   console.log('unstuck', target)
-          // clearInterval(ghostOneTargetMove1)
-          // randomTarget()
-          // return ghostToTargetMovement()
+        //   clearInterval(ghostOneTargetMove1)
+        //   randomTarget()
+        //   return ghostToTargetMovement()
         // } 
-        console.log('forced')
+        
         if (xDifference === 0 && yDifference === 0) {
-          console.log('targetMoved')
           closeBox()
           clearInterval(ghostOneTargetMove1)
+          console.log('arrived, new target')
           randomTarget()
           return ghostToTargetMovement()
-        } else forceMove(xDifference, yDifference)
+        // }  else if (duplicateGhostIdx > 5) {
+        //   console.log('unstuck', target)
+        //   clearInterval(ghostOneTargetMove1)
+        //   randomTarget()
+        //   return ghostToTargetMovement()
+        // } else if (ghostOneIdx === pipArray.indexOf(108) || ghostOneIdx === pipArray.indexOf(111)) {
+        //   clearInterval(ghostOneTargetMove1)
+        //   console.log('108 or 111, new target')
+        //   randomTarget()
+        //   return ghostToTargetMovement()
+        } else forceMove(xDifference, yDifference), console.log('forced')
       }
       lastGhostIdx = ghostOneIdx
-      gameOver(ghostOneIdx)
+      
     }, speed)
+  }
+
+  function chasePac(ghostIdx, playerIdx) {
+    const ghostY = Math.abs(Math.floor(ghostIdx / width))
+    const ghostX = Math.abs(ghostIdx % width)
+    const pacY = Math.abs(Math.floor(playerIdx / width))
+    const pacX = Math.abs(playerIdx % width)
+    let pacGhostYDifference = null
+    let pacGhostXDifference = null
+
+    if (ghostY > pacY) {
+      pacGhostYDifference = ghostY - pacY
+    } else pacGhostYDifference = pacY - ghostY
+    if (ghostX > pacX) {
+      pacGhostXDifference = ghostX - pacX
+    } else pacGhostXDifference = pacX - ghostX
+    
+    if (pacGhostYDifference <= 5 && pacGhostXDifference <= 5){
+      console.log('chasing')
+      return target = playerIdx
+    }
+  }
+
+  function tenSecondReassign() {
+    clearInterval(setting10SecondTimer)
+    setting10SecondTimer = setTimeout(() => {
+      clearInterval(ghostOneTargetMove1)
+      console.log('Times up, new target')
+      randomTarget()
+      return ghostToTargetMovement()
+    }, 5000)
   }
 
   function closeBox() {
@@ -497,7 +469,7 @@ window.addEventListener('DOMContentLoaded', () => {
         ghostUpByOne()
       }
     } else if (availableDirectionCount() === 2) {
-      console.log(xDiff)
+      // console.log(xDiff)
       if (xDiff === 0) {
         console.log('f21')
         if (ghostWallCheck('left')) ghostLeftByOne()
@@ -520,8 +492,18 @@ window.addEventListener('DOMContentLoaded', () => {
         if (random2 === 1) ghostUpByOne(), ghostDownByOne()
         else ghostRightByOne(), ghostLeftByOne()
       }
+    } else if (availableDirectionCount() === 3) {
+      console.log('f33')
+      const random3 = Math.ceil(Math.random() * 2)
+      if (random3 === 1 && ghostWallCheck('up')) ghostUpByOne()
+      if (random3 === 1 && ghostWallCheck('down')) ghostDownByOne()
+      if (random3 === 2 && ghostWallCheck('right')) ghostRightByOne()
+      if (random3 === 2 && ghostWallCheck('left')) ghostLeftByOne()
+  
     }
   }
+
+
 
   function availableDirectionCount() {
     let wallCount = 0
@@ -539,7 +521,7 @@ window.addEventListener('DOMContentLoaded', () => {
       random399 = Math.floor(Math.random() * 399)
     }
     target = random399
-    console.log(target)
+    console.log('target moved to', target)
     return target
   }
     
@@ -651,4 +633,112 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
 
+
+// ***************************
+// GHOST TOTAL RANDOM MOVEMENT
+// ***************************
+
+//ghost movement
+// function movementGhost(keyCode, characterClass) {
+
+//   //clearing previous movement
+//   clearInterval(ghostOneMoving)
+//   //loop
+//   ghostOneMoving = setInterval(() => {
+    
+  
+//     // moving left
+//     if (keyCode === 37) {
+//       console.log(`ghostOne index ${ghostOneIdx}`)
+//       //removing pips and accumalating points
+//       pipCount()
+//       //removing preivous rotation class
+//       removePreviousRotation(ghostOneIdx)
+//       //remove pacman
+//       cells[ghostOneIdx].classList.remove(characterClass)
+//       // if a wall ahead
+//       if (cells[ghostOneIdx - 1].classList.contains('wall')) {
+//         //add pacman
+//         cells[ghostOneIdx].classList.add(characterClass)
+//         // rotating div
+//         // cells[ghostIdx].classList.add('rotate-left')
+//         // stop loop
+//         return clearInterval(ghostOneMoving)
+//       }
+//       //move pacman left by 1
+//       ghostOneIdx -= 1
+//       //if at middle opening, loop to opposite side
+//       if (ghostOneIdx === 180) ghostOneIdx = 199
+//       // add pacman
+//       cells[ghostOneIdx].classList.add(characterClass)
+//       // rotating div
+//       // cells[ghostIdx].classList.add('rotate-left')
+//     }
+
+//     // moving right
+//     if (keyCode === 39) {
+//       console.log(`ghostOne index ${ghostOneIdx}`)
+//       pipCount()
+//       removePreviousRotation(ghostOneIdx)
+//       cells[ghostOneIdx].classList.remove(characterClass)
+//       if (cells[ghostOneIdx + 1].classList.contains('wall')) {
+//         cells[ghostOneIdx].classList.add(characterClass)
+//         // cells[ghostIdx].classList.add('rotate-right')
+//         return clearInterval(ghostOneMoving)
+//       }
+//       ghostOneIdx += 1
+//       if (ghostOneIdx === 199) ghostOneIdx = 180
+//       cells[ghostOneIdx].classList.add(characterClass)
+//       // cells[ghostIdx].classList.add('rotate-right')
+//     }
+
+//     //moving up
+//     if (keyCode === 38) {
+//       console.log(`ghostOne index ${ghostOneIdx}`)
+//       pipCount()
+//       removePreviousRotation(ghostOneIdx)
+//       cells[ghostOneIdx].classList.remove(characterClass)
+//       if (cells[ghostOneIdx - width].classList.contains('wall')) {
+//         cells[ghostOneIdx].classList.add(characterClass)
+//         // cells[ghostIdx].classList.add('rotate-up')
+//         return clearInterval(ghostOneMoving)
+//       }
+//       ghostOneIdx -= width
+//       cells[ghostOneIdx].classList.add(characterClass)
+//       // cells[ghostIdx].classList.add('rotate-up')
+//     }
+//     //moving down
+//     if (keyCode === 40) {
+//       console.log(`ghostOne index ${ghostOneIdx}`)
+//       pipCount()
+//       removePreviousRotation(ghostOneIdx)
+//       cells[ghostOneIdx].classList.remove(characterClass)
+//       if (cells[ghostOneIdx + width].classList.contains('wall')) {
+//         cells[ghostOneIdx].classList.add(characterClass)
+//         // cells[ghostIdx].classList.add('rotate-down')
+//         return clearInterval(ghostOneMoving)
+//       }
+//       ghostOneIdx += width
+//       cells[ghostOneIdx].classList.add(characterClass)
+//       // cells[ghostIdx].classList.add('rotate-down')
+//     }
+//     // stageComplete(points)
+//   }, speed)
+
+// }
+
+// ghostOneBehaviour()
+// function ghostOneBehaviour(){
+//   setInterval(() => {
+//     const key = keyGenerator()
+//     console.log(key)
+//     movementGhost(key , 'ghost', ghostOneIdx)
+//   }, 500)
+  
+// }
+
+// function keyGenerator() {
+//   const randomFour = Math.floor(Math.random() * 4)
+//   return randomFour + 37
+// }
 
