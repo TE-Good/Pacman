@@ -16,6 +16,19 @@ body {
   font-family: 'Seymour One', sans-serif;
 }
 
+.body-inverse {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  flex-wrap: wrap;
+  overflow: hidden;
+  flex-direction: column;
+  background: black;
+  font-family: 'Seymour One', sans-serif;
+  color: white;
+}
+
 .grid {
   /* background: white; */
   display: flex;
@@ -32,7 +45,7 @@ body {
 }
 
 .grid div {
-  border: 1px white solid;
+  /* border: 1px white solid; */
   flex-grow: 1;
   height: 5%;
   width: 5%;
@@ -42,9 +55,20 @@ body {
   border-radius: 10px;
 }
 
-.inner {
-  /* height: 100%; */
+.wall {
+  border: 1px white solid;
+  background: black;
+
 }
+
+.wall-inverse {
+  border: 1px black solid;
+  background: white;
+}
+
+/* .inner {
+  /* height: 100%; */
+/* } */
 
 .pip {
   /* border: 2px grey solid; */
@@ -53,7 +77,13 @@ body {
   height: 50%;
   width: 50%;
   border-radius: 100%;
+}
 
+.power {
+  height: 75%;
+  width: 75%;
+  border-radius: 100%;
+  background: orange;
 }
 
 .grid div.player {
@@ -78,12 +108,14 @@ body {
   transform: rotate(270deg)
 }
 
-.wall {
-  background: black;
+
+
+.stage-one {
+  align-self: flex-end;
 }
 
 .score{
-  align-self: flex-end
+  align-self: flex-end;
 }
 
 .ghost-one {
@@ -103,6 +135,17 @@ body {
   color: red;
 }
 
+.start-screen {
+  display:flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.start-screen > h1 {
+  font-size: 500%;
+}
+
 .game-over {
   display:flex;
   justify-content: center;
@@ -112,6 +155,14 @@ body {
   width: 150%; */
 }
 
+.game-over > h1 {
+  font-size: 450%;
+}
+
 .hidden {
   display: none;
+}
+
+.ghost-scared {
+  background: blue;
 }
