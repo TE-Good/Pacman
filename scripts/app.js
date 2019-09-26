@@ -10,8 +10,14 @@ window.addEventListener('DOMContentLoaded', () => {
   const width = 20
   const grid = document.querySelector('.grid')
   const score = document.querySelector('.score')
+  const startScreenTitle = document.querySelector('.start-screen')
   const gameOverTitle = document.querySelector('.game-over')
   const stageOneTitle = document.querySelector('.stage-one')
+  const stageTwoTitle = document.querySelector('.stage-two')
+  const stageOneComplete = document.querySelector('.stage-one-complete')
+  const gameOverScore = document.querySelector('.game-over-score')
+  const stageOneScore = document.querySelector('.stage-one-score')
+  const win = document.querySelector('.win')
   const body = document.querySelector('body')
   const cells = []
   // inital character placement (array index)
@@ -27,11 +33,11 @@ window.addEventListener('DOMContentLoaded', () => {
   let points = 0
   // character speed
   // const speed = 150
-  const speed = 150
+  let speed = 100
   let ghostSpeed = speed
 
   //ghost 1 location
-  let ghostOneIdx = 151
+  // const ghostOneIdx = 151
 
   // ghost - up left down or right
   let lastPosition = null
@@ -63,7 +69,7 @@ window.addEventListener('DOMContentLoaded', () => {
   let gameOverLoop = null
 
   //game state
-  let gameState = true
+  let gameState = null
 
   // chasing loop
   // let canIChase = null
@@ -82,13 +88,19 @@ window.addEventListener('DOMContentLoaded', () => {
   //power mode duration
   let powerModeDuration = 5000
 
+  //startscreen
+  let startScreen = true
+
+  // stage one screen
+  let stageOneScreen = false
+
   
 
   // grid creation
   for (let i = 0; i < width ** 2; i++) {
     const cell = document.createElement('div')
     // grid numbers
-    // cell.innerHTML = `${i}`
+    cell.innerHTML = `${i}`
     grid.appendChild(cell)
     cells.push(cell)
   }
@@ -119,17 +131,50 @@ window.addEventListener('DOMContentLoaded', () => {
   // initial character placement
   cells[playerIdx].classList.add('player')
   // initial ghost one placement
-  cells[ghostOneIdx].classList.add('ghost')
+  // cells[ghostOneIdx].classList.add('ghost')
 
   //X Y Player Co-ordinates
-  const x = playerIdx % width
-  const y = Math.floor(playerIdx / width)
+  // const x = playerIdx % width
+  // const y = Math.floor(playerIdx / width)
 
   // KEY EVENT LISTENER
-  playerMove(gameState)
-  function playerMove(gameState) {
-    if (gameState) {
-      document.addEventListener('keyup', e => {
+  playerMove()
+  function playerMove() {
+    document.addEventListener('keyup', e => {
+
+      // start screen -> spacebar activation
+      if (e.keyCode === 32 && startScreen) {
+        startScreen = false
+        addGrid()
+        startScreenTitle.classList.add('hidden')
+        
+        setTimeout(() => {
+          gameState = true
+          ghostOne.start()
+          ghostTwo.start()
+          ghostThree.start()
+          ghostFour.start()
+        }, 3000)
+
+      }
+      // stage one screen -> spacebar activation
+      if (e.keyCode === 32 && stageOneScreen) {
+        stageOneScreen = false
+        addGrid()
+        stageOneComplete.classList.add('hidden')
+        stageOneTitle.classList.add('hidden')
+        stageTwoTitle.classList.remove('hidden')
+        
+        setTimeout(() => {
+          gameState = true
+          ghostOne.start()
+          ghostTwo.start()
+          ghostThree.start()
+          ghostFour.start()
+        }, 3000)
+
+      }
+      if (gameState === true) {
     
         // console.log(e.keyCode)
         // cells[playerIdx].classList.remove('player')
@@ -139,22 +184,34 @@ window.addEventListener('DOMContentLoaded', () => {
           case 37: 
             if (!cells[playerIdx - 1].classList.contains('wall')) movementPlayer(37, 'player')
             break
+          case 65: 
+            if (!cells[playerIdx - 1].classList.contains('wall')) movementPlayer(37, 'player')
+            break
           //up
           case 38:
+            if (!cells[playerIdx - width].classList.contains('wall')) movementPlayer(38, 'player')
+            break
+          case 87:
             if (!cells[playerIdx - width].classList.contains('wall')) movementPlayer(38, 'player')
             break
           //right
           case 39:
             if (!cells[playerIdx + 1].classList.contains('wall')) movementPlayer(39, 'player')
             break
+          case 68:
+            if (!cells[playerIdx + 1].classList.contains('wall')) movementPlayer(39, 'player')
+            break
           //down
           case 40: 
             if (!cells[playerIdx + width].classList.contains('wall')) movementPlayer(40, 'player')
             break
+          case 83: 
+            if (!cells[playerIdx + width].classList.contains('wall')) movementPlayer(40, 'player')
+            break
         }
         // cells[playerIdx].classList.add('player')
-      }) //END OF EVENT LISTENER
-    }
+      }
+    }) //END OF EVENT LISTENER
   }
 
   function movementPlayer(keyCode, characterClass) {
@@ -258,24 +315,39 @@ window.addEventListener('DOMContentLoaded', () => {
         gameState = false
         clearInterval(playerMoving)
         clearInterval(gameOverLoop)
-        clearInterval(ghostOne.ghostOneTargetMove1)
-        clearInterval(ghostOne.setting10SecondTimer)
-        clearInterval(ghostTwo.ghostOneTargetMove1)
-        clearInterval(ghostTwo.setting10SecondTimer)
-        clearInterval(ghostThree.ghostOneTargetMove1)
-        clearInterval(ghostThree.setting10SecondTimer)
-        clearInterval(ghostFour.ghostOneTargetMove1)
-        clearInterval(ghostFour.setting10SecondTimer)
+        ghostOne.stop()
+        ghostTwo.stop()
+        ghostThree.stop()
+        ghostFour.stop()
+        // clearInterval(ghostOne.ghostOneTargetMove1)
+        // clearInterval(ghostOne.setting10SecondTimer)
+        // clearInterval(ghostTwo.ghostOneTargetMove1)
+        // clearInterval(ghostTwo.setting10SecondTimer)
+        // clearInterval(ghostThree.ghostOneTargetMove1)
+        // clearInterval(ghostThree.setting10SecondTimer)
+        // clearInterval(ghostFour.ghostOneTargetMove1)
+        // clearInterval(ghostFour.setting10SecondTimer)
         //delaying putting the game over screen on
         setTimeout(() => {
-          grid.classList.add('hidden')
-          stageOneTitle.classList.add('hidden')
-          score.classList.add('hidden')
+          removeGrid()
+          gameOverScore.innerHTML = points
           gameOverTitle.classList.remove('hidden')
           return true
         }, 500)
       }
     }, 1)
+  }
+
+  function addGrid() {
+    grid.classList.remove('hidden')
+    stageOneTitle.classList.remove('hidden')
+    score.classList.remove('hidden')
+  }
+  function removeGrid() {
+    grid.classList.add('hidden')
+    if (!stageOneTitle.classList.contains('hidden'))stageOneTitle.classList.add('hidden')
+    if (!stageTwoTitle.classList.contains('hidden'))stageTwoTitle.classList.add('hidden')
+    score.classList.add('hidden')
   }
   
 
@@ -285,7 +357,7 @@ window.addEventListener('DOMContentLoaded', () => {
       // if that child contains pip
       if (cells[playerIdx].children[1].classList.contains('pip')) {
         //increment a point
-        points++
+        points += 10
         // update the score
         score.innerHTML = `Score:${points}`
         // console.log(`You have ${points} points!`)
@@ -301,7 +373,7 @@ window.addEventListener('DOMContentLoaded', () => {
       if (cells[playerIdx].children[1].classList.contains('power')) {
         // powerModeOn = false
         clearInterval(gameOverLoop)
-        points += 49
+        points += 40
 
         // changing colours
         body.classList.add('body-inverse')
@@ -311,7 +383,8 @@ window.addEventListener('DOMContentLoaded', () => {
         })
 
         //halving the speed
-        ghostSpeed = speed / 2
+        ghostSpeed = speed / 5
+        console.log(ghostSpeed)
 
         cells[ghostOne.ghostIdx].classList.remove(ghostOne.cssClass)
         cells[ghostTwo.ghostIdx].classList.remove(ghostTwo.cssClass)
@@ -356,6 +429,7 @@ window.addEventListener('DOMContentLoaded', () => {
         if (powerModeOn === false){
           powerModeOn = true
           // powerModeTimer = setTimeout(() => {
+          // might make an end method for my ghost class instead of these lines
           setTimeout(() => {
             cells[ghostOne.ghostIdx].classList.remove(ghostOne.cssClass)
             cells[ghostTwo.ghostIdx].classList.remove(ghostTwo.cssClass)
@@ -395,9 +469,51 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   function stageComplete(points) {
-    if (points === 134) {
-      score.innerHTML = 'STAGE COMPLETE'
-      return console.log('STAGE COMPLETE')
+    if (points === 1500) {
+      removeGrid()
+      console.log('STAGE COMPLETE')
+      stageOneComplete.classList.remove('hidden')
+
+      gameState = false
+      clearInterval(playerMoving)
+      clearInterval(gameOverLoop)
+      ghostOne.stop()
+      ghostOne.reset()
+      ghostTwo.stop()
+      ghostTwo.reset()
+      ghostThree.stop()
+      ghostThree.reset()
+      ghostFour.stop()
+      ghostFour.reset()
+
+
+      // repopulating pip creation
+      cells.forEach((item, index) => {
+        const cell = document.createElement('section')
+        powerArray.includes(index) ? item.appendChild(cell).classList.add('power') : 0
+        return pipArray.includes(index) ? item.appendChild(cell).classList.add('pip') : 0
+      })
+
+      clearInterval(pacmanEat)
+      gameOverLooper()
+      stageOneScore.innerHTML = 1500
+
+      stageOneScreen = true
+    }
+    if (points === 3000) {
+      removeGrid()
+      gameState = false
+      win.classList.remove('hidden')
+      clearInterval(playerMoving)
+      clearInterval(gameOverLoop)
+      ghostOne.stop()
+      ghostOne.reset()
+      ghostTwo.stop()
+      ghostTwo.reset()
+      ghostThree.stop()
+      ghostThree.reset()
+      ghostFour.stop()
+      ghostFour.reset()
     }
   }
 
@@ -417,7 +533,9 @@ window.addEventListener('DOMContentLoaded', () => {
   class Ghost {
     constructor(ghostIdx, target, cssClass, speed) {
       this.ghostIdx = ghostIdx
+      this.ghostIdxStored = ghostIdx
       this.target = target
+      this.targetStored = target
       this.cssClass = cssClass
       this.speed = speed
   
@@ -435,6 +553,9 @@ window.addEventListener('DOMContentLoaded', () => {
       this.random399 = null
       this.originalCssClass = this.cssClass
       this.chasing = null
+    }
+    initalPlacement() {
+      cells[this.ghostIdx].classList.add(this.cssClass)
     }
   
   
@@ -523,7 +644,6 @@ window.addEventListener('DOMContentLoaded', () => {
           // if (this.gameOver()) return clearInterval(this.gameOver()), 0
           // else 
           if (xDifference === 0 && yDifference === 0) {
-            this.closeBox()
             // console.log('arrived, new target')
             clearInterval(this.ghostOneTargetMove1)
             this.randomTarget()
@@ -531,31 +651,8 @@ window.addEventListener('DOMContentLoaded', () => {
           } else this.forceMove(xDifference, yDifference)
         }
         this.lastghostIdx = this.ghostIdx
-      }, this.speed)
+      }, speed)
     }
-
-    // powerMode() {
-    //   if (powerMode === true) {
-    //     powerMode = false
-    //     // cells[this.ghostIdx].classList.remove(this.cssClass)
-    //     // this.originalCssClass = this.cssClass
-    //     cells[this.ghostIdx].classList.remove(this.cssClass)
-    //     this.cssClass = 'ghost-scared'
-    //     // this.randomTarget()
-    //     // return this.start()
-    //     // powerMod e = false
-    //     powerModeTimer = setTimeout(() => {
-    //       // clearInterval(this.ghostOneTargetMove1)
-    //       cells[this.ghostIdx].classList.remove(this.cssClass)
-    //       this.cssClass = this.originalCssClass
-    //       console.log('change')
-    //       clearTimeout(powerModeTimer)
-    //       clearInterval(this.ghostOneTargetMove1)
-    //       this.randomTarget()
-    //       return this.start()
-    //     }, 5000)
-    //   }
-    // }
     
     chasePac() {
       if (!powerMode) {
@@ -572,14 +669,14 @@ window.addEventListener('DOMContentLoaded', () => {
         if (this.ghostX > this.pacX) {
           this.pacGhostXDifference = this.ghostX - this.pacX
         } else this.pacGhostXDifference = this.pacX - this.ghostX
-        if (this.pacGhostYDifference === 0 || this.pacGhostXDifference === 0){
+        if (this.pacGhostYDifference <= 1 || this.pacGhostXDifference <= 1){
           console.log('chasing')
           this.chasing = true
           return this.target = playerIdx
         }
       } else if (powerMode === true && this.chasing === true){
         this.chasing = false
-        console.log('chase stopped')
+        // console.log('chase stopped')
         clearInterval(this.setting10SecondTimer)
         this.randomTarget()
         return this.start()
@@ -599,15 +696,6 @@ window.addEventListener('DOMContentLoaded', () => {
       }, 5000)
     }
     
-
-    // SORT THIS OUT
-    closeBox() {
-      return 0
-      // cells[187].classList.add('ghost-banned')
-      // ghostBanned.push(187)
-      // cells[192].classList.add('ghost-banned')
-      // ghostBanned.push(192)
-    }
     
     forceMove(xDiff, yDiff) {
       // console.log(this.availableDirectionCount())
@@ -726,6 +814,19 @@ window.addEventListener('DOMContentLoaded', () => {
         return targetX - (this.ghostIdx % width)
       } else return 0
     }
+
+    stop() {
+
+      clearInterval(this.ghostOneTargetMove1)
+      clearInterval(this.setting10SecondTimer)
+    }
+
+    reset() {
+      cells[this.ghostIdx].classList.remove(this.cssClass)
+      this.ghostIdx = this.ghostIdxStored
+      this.target = this.targetStored
+      cells[this.ghostIdx].classList.add(this.cssClass)
+    }
     
     // GHOST INDIVIDUAL MOVEMENTS
     ghostUpByOne(clearIntervalFunctionName) {
@@ -788,13 +889,20 @@ window.addEventListener('DOMContentLoaded', () => {
   } // END OF CLASS
   
   const ghostOne = new Ghost(150, 193, 'ghost-one', ghostSpeed)
-  const ghostTwo = new Ghost(148, 186, 'ghost-two', ghostSpeed)
-  const ghostThree = new Ghost(209, 344, 'ghost-three', ghostSpeed)
-  const ghostFour = new Ghost(209,  186, 'ghost-four', ghostSpeed)
-  ghostOne.start()
-  ghostTwo.start()
-  ghostThree.start()
-  ghostFour.start()
+  const ghostTwo = new Ghost(149, 186, 'ghost-two', ghostSpeed)
+  const ghostThree = new Ghost(211, 193, 'ghost-three', ghostSpeed)
+  const ghostFour = new Ghost(208,  186, 'ghost-four', ghostSpeed)
+  ghostOne.initalPlacement()
+  ghostTwo.initalPlacement()
+  ghostThree.initalPlacement()
+  ghostFour.initalPlacement()
+  // ghostOne.start()
+  // ghostTwo.start()
+  // ghostThree.start()
+  // ghostFour.start()
+
+  
+  
 
   
 

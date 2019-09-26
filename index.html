@@ -10,16 +10,28 @@
   <title>Document</title>
 </head>
 <body>
-  <div class="start-screen hidden">
+  <div class="countdown behind hidden">1</div>
+  <div class="countdown hidden">1</div>
+  <div class="start-screen">
     <h1>PACMAN</h1>
     <p>press space to start</p>
   </div>
-  <div class="grid"></div>
-  <div class="stage-one">STAGE 1</div>
-  <div class="score">Score: 0</div>
+  <div class="grid hidden"></div>
+  <div class="stage-one hidden">STAGE 1</div>
+  <div class="stage-two hidden">STAGE 2</div>
+  <div class="score hidden">Score: 0</div>
   <div class="game-over hidden">
     <h1>GAME OVER</h1>
+    <h4>SCORE: <span class="game-over-score"></span></h4>
     <p>press CMD + R to restart</p>
+  </div>
+  <div class="stage-one-complete hidden">
+    <h1>STAGE ONE COMPLETE</h1>
+    <h4>SCORE: <span class="stage-one-score"></span></h4>
+    <p>press space to continue</p>
+  </div>
+  <div class="win hidden">
+    <h1>YOU WIN</h1>
   </div>
 </body>
 </html>

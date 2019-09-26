@@ -42,6 +42,8 @@ body {
   height: 100%;
   justify-content: center;
   font-size: 30%;
+  /* transition: transform 3s linear;
+  transform: rotate(360deg) */
 }
 
 .grid div {
@@ -113,6 +115,9 @@ body {
 .stage-one {
   align-self: flex-end;
 }
+.stage-two {
+  align-self: flex-end;
+}
 
 .score{
   align-self: flex-end;
@@ -146,6 +151,30 @@ body {
   font-size: 500%;
 }
 
+.countdown {
+  display: block;
+  position: absolute;
+  float: left;
+  margin: auto;
+  font-size: 600%;
+}
+
+.behind {
+  color: white;
+  font-size: 700%;
+}
+
+.stage-one-complete {
+  display:flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stage-one-complete > h1 {
+  font-size: 450%;
+}
+
 .game-over {
   display:flex;
   justify-content: center;
@@ -156,6 +185,18 @@ body {
 }
 
 .game-over > h1 {
+  font-size: 450%;
+}
+
+.win {
+  display:flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  /* height: 150%;
+  width: 150%; */
+}
+.win > h1 {
   font-size: 450%;
 }
 
