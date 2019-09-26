@@ -30,7 +30,7 @@ window.addEventListener('DOMContentLoaded', () => {
   // let ghostOneTargetMove = null
   // let ghostOneTargetMove1 = null
   //points coutner
-  let points = 0
+  let points = 1470
   // character speed
   // const speed = 150
   const speed = 125
@@ -50,7 +50,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   //
   // let lastGhostIdx = 0
-//force move function
+  //force move function
   // let forceMoveFunction = null
 
   // preferred direciton
@@ -93,6 +93,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // stage one screen
   let stageOneScreen = false
+  let stageOneTitleCheck = false
 
   
 
@@ -164,6 +165,9 @@ window.addEventListener('DOMContentLoaded', () => {
         stageOneComplete.classList.add('hidden')
         stageOneTitle.classList.add('hidden')
         stageTwoTitle.classList.remove('hidden')
+        cells[playerIdx].classList.remove('player')
+        playerIdx = 290
+        cells[playerIdx].classList.add('player')
         
         setTimeout(() => {
           gameState = true
@@ -171,6 +175,9 @@ window.addEventListener('DOMContentLoaded', () => {
           ghostTwo.start()
           ghostThree.start()
           ghostFour.start()
+          grid.classList.add('animated')
+          grid.classList.add('rotate')
+          grid.classList.add('rotate360')
         }, 3000)
 
       }
@@ -471,9 +478,10 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   function stageComplete(points) {
-    if (points === 1500) {
+    if (points === 1500 && stageOneTitleCheck === false) {
+      stageOneTitleCheck = true
       removeGrid()
-      console.log('STAGE COMPLETE')
+      // console.log('STAGE COMPLETE')
       stageOneComplete.classList.remove('hidden')
 
       gameState = false
