@@ -24,46 +24,46 @@ window.addEventListener('DOMContentLoaded', () => {
   let playerIdx = 290
   //intitalising player movement setInterval()
   let playerMoving = null
-  //initalising ghost one random movement
-  let ghostOneMoving = null
-  //intialising ghoss one targeted movement
-  let ghostOneTargetMove = null
-  let ghostOneTargetMove1 = null
+  // //initalising ghost one random movement
+  // let ghostOneMoving = null
+  // //intialising ghoss one targeted movement
+  // let ghostOneTargetMove = null
+  // let ghostOneTargetMove1 = null
   //points coutner
   let points = 0
   // character speed
   // const speed = 150
-  let speed = 100
-  let ghostSpeed = speed
+  const speed = 125
+  let ghostSpeed = 150
 
   //ghost 1 location
   // const ghostOneIdx = 151
 
   // ghost - up left down or right
-  let lastPosition = null
+  // let lastPosition = null
 
   //ghostPriorityDirection
-  let ghostPriorityDirection = null
+  // let ghostPriorityDirection = null
 
   //backtrack loop
-  let backTrackLoop = null
+  // let backTrackLoop = null
 
   //
-  let lastGhostIdx = 0
+  // let lastGhostIdx = 0
 //force move function
-  let forceMoveFunction = null
+  // let forceMoveFunction = null
 
   // preferred direciton
-  let preferredGhostDirection = null
+  // let preferredGhostDirection = null
 
   // unstuck counter
-  let duplicateGhostIdx = null
+  // let duplicateGhostIdx = null
 
   //target of ghost
-  let target = 0
+  // let target = 0
 
   //10 seconds clear timer for ghost reassignment
-  let setting10SecondTimer = null
+  // let setting10SecondTimer = null
 
   //gameOver Interval timer
   let gameOverLoop = null
@@ -100,7 +100,7 @@ window.addEventListener('DOMContentLoaded', () => {
   for (let i = 0; i < width ** 2; i++) {
     const cell = document.createElement('div')
     // grid numbers
-    cell.innerHTML = `${i}`
+    // cell.innerHTML = `${i}`
     grid.appendChild(cell)
     cells.push(cell)
   }
@@ -311,6 +311,8 @@ window.addEventListener('DOMContentLoaded', () => {
     gameOverLoop = setInterval(() => {
       if (ghostOne.ghostIdx === playerIdx || ghostTwo.ghostIdx === playerIdx || 
         ghostThree.ghostIdx === playerIdx || ghostFour.ghostIdx === playerIdx) {
+        removePreviousRotation(playerIdx)
+        cells[playerIdx].classList.remove('player')
         //state to stop game
         gameState = false
         clearInterval(playerMoving)
@@ -383,7 +385,7 @@ window.addEventListener('DOMContentLoaded', () => {
         })
 
         //halving the speed
-        ghostSpeed = speed / 5
+        // ghostSpeed = speed
         console.log(ghostSpeed)
 
         cells[ghostOne.ghostIdx].classList.remove(ghostOne.cssClass)
@@ -569,6 +571,7 @@ window.addEventListener('DOMContentLoaded', () => {
         const xDifference = this.ghostXDirection(this.ghostIdx, this.target)
         const yDifference = this.ghostYDirection(this.ghostIdx, this.target)
 
+        // console.log(this.ghostIdx, Math.abs(xDifference) > Math.abs(yDifference))
         switch (Math.abs(xDifference) > Math.abs(yDifference)) {
           //if x if a minus number - will need to add
           // if x greater than y (therefore do X axis first)
@@ -580,11 +583,11 @@ window.addEventListener('DOMContentLoaded', () => {
                 // console.log(1, 'right')
                 this.ghostRightByOne()
                 //if not then if y is a postive number, try down
-              } else if (yDifference > 0) {
+              } else if (yDifference > 0 && this.ghostWallCheck('down')) {
                 // console.log(12)
                 this.ghostDownByOne()
-                // if not then if y is a negative number try right
-              } else if (yDifference < 0) {
+                // if not then if y is a negative number try up
+              } else if (yDifference < 0 && this.ghostWallCheck('up')) {
                 // console.log(13)
                 this.ghostUpByOne()
               } 
@@ -725,7 +728,7 @@ window.addEventListener('DOMContentLoaded', () => {
         if (yDiff === 0) {
           // console.log('f22')
           if (this.ghostWallCheck('up')) this.ghostUpByOne()
-          else if (this.ghostWallCheck('right')) this.ghostDownByOne()
+          else if (this.ghostWallCheck('down')) this.ghostDownByOne()
         } else if (Math.abs(yDiff) > Math.abs(xDiff)) {
           if (yDiff < 0) this.ghostLeftByOne()
           if (yDiff > 0) this.ghostRightByOne()
@@ -888,10 +891,10 @@ window.addEventListener('DOMContentLoaded', () => {
     
   } // END OF CLASS
   
-  const ghostOne = new Ghost(150, 193, 'ghost-one', ghostSpeed)
-  const ghostTwo = new Ghost(149, 186, 'ghost-two', ghostSpeed)
-  const ghostThree = new Ghost(211, 193, 'ghost-three', ghostSpeed)
-  const ghostFour = new Ghost(208,  186, 'ghost-four', ghostSpeed)
+  const ghostOne = new Ghost(28, 193, 'ghost-one', ghostSpeed)
+  const ghostTwo = new Ghost(31, 186, 'ghost-two', ghostSpeed)
+  const ghostThree = new Ghost(21, 193, 'ghost-three', ghostSpeed)
+  const ghostFour = new Ghost(38,  186, 'ghost-four', ghostSpeed)
   ghostOne.initalPlacement()
   ghostTwo.initalPlacement()
   ghostThree.initalPlacement()

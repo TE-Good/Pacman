@@ -36,7 +36,7 @@ body {
   min-height: 600px;
   max-width: 600px;
   min-width: 600px;
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
+  /* box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2); */
   flex-grow: 1;
   flex-wrap: wrap;
   height: 100%;
@@ -44,6 +44,7 @@ body {
   font-size: 30%;
   /* transition: transform 3s linear;
   transform: rotate(360deg) */
+  animation-iteration-count: infinite;
 }
 
 .grid div {
@@ -73,12 +74,13 @@ body {
 /* } */
 
 .pip {
-  /* border: 2px grey solid; */
   background: gold;
-  /* background: grey; */
-  height: 50%;
-  width: 50%;
+  /* height: 50%;
+  width: 50%; */
+  height: 25%;
+  width: 25%;
   border-radius: 100%;
+  z-index: -1;
 }
 
 .power {
@@ -89,7 +91,8 @@ body {
 }
 
 .grid div.player {
-  background-image: url(../assets/pacman.png);
+  /* background-image: url(../assets/pacman.png); */
+  background-image: url(https://media.giphy.com/media/Es7BExB12lfDW/giphy.gif);
   background-size: contain;
   background-repeat: no-repeat;
   background-position-x: 0;
@@ -110,8 +113,6 @@ body {
   transform: rotate(270deg)
 }
 
-
-
 .stage-one {
   align-self: flex-end;
 }
@@ -124,16 +125,29 @@ body {
 }
 
 .ghost-one {
-  background: pink;
+  /* background: pink; */
+  background-image: url(https://media.giphy.com/media/RAGUpYLsOX2Pm/giphy.gif);
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 .ghost-two {
-  background: aquamarine;
+  /* background: aquamarine; */
+  background-image: url(https://media.giphy.com/media/cq8qwbRUWruRG/giphy.gif);
+  background-size: contain;
+  background-repeat: no-repeat;
+  
 }
 .ghost-three {
-  background: lightskyblue;
+  /* background: lightgreen; */
+  background-image: url(https://media.giphy.com/media/cq8qwbRUWruRG/giphy.gif);
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 .ghost-four {
-  background: lightgreen;
+  /* background: lightskyblue; */
+  background-image: url(https://media.giphy.com/media/NctG5rLeF1Fm0/giphy.gif);
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 
 .ghost-banned {
@@ -142,13 +156,18 @@ body {
 
 .start-screen {
   display:flex;
-  justify-content: center;
+  justify-content: space-between;
   flex-direction: column;
   align-items: center;
 }
 
 .start-screen > h1 {
   font-size: 500%;
+  animation: rotate-pulse  4s linear infinite;
+}
+
+.start-screen > p {
+  animation-iteration-count: infinite;
 }
 
 .countdown {
@@ -170,10 +189,14 @@ body {
   flex-direction: column;
   align-items: center;
 }
-
 .stage-one-complete > h1 {
   font-size: 450%;
+  animation: pulse-stage-one-complete 3s linear infinite;
 }
+.stage-one-complete > p {
+  animation-iteration-count: infinite;
+}
+
 
 .game-over {
   display:flex;
@@ -183,10 +206,17 @@ body {
   /* height: 150%;
   width: 150%; */
 }
+.game-over > p {
+  animation-iteration-count: infinite;
+}
 
 .game-over > h1 {
   font-size: 450%;
+  animation: pulse 4s linear infinite;
 }
+/* .game-over > h4 {
+  animation: pulse 4s linear infinite;
+} */
 
 .win {
   display:flex;
@@ -198,6 +228,7 @@ body {
 }
 .win > h1 {
   font-size: 450%;
+  animation: pulse 4s linear infinite;
 }
 
 .hidden {
@@ -205,5 +236,52 @@ body {
 }
 
 .ghost-scared {
-  background: blue;
+  /* background: blue; */
+  background-image: url(../assets/blue-ghost.gif);
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+@keyframes rotate-pulse {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(20deg);
+    font-size: 300%;
+  }
+  50% {
+    transform: rotate(0deg);
+    font-size: 600%;
+  }
+  75% {
+    transform: rotate(-20deg);
+    font-size: 300%;
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    font-size: 300%;
+  }
+  50% {
+    font-size: 600%;
+  }
+  100% {
+    font-size: 300%;
+  }
+}
+@keyframes pulse-stage-one-complete {
+  0% {
+    font-size: 300%;
+  }
+  50% {
+    font-size: 500%;
+  }
+  100% {
+    font-size: 300%;
+  }
 }
