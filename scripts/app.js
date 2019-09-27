@@ -47,7 +47,7 @@ window.addEventListener('DOMContentLoaded', () => {
   // character speed
   // const speed = 150
   const speed = 125
-  let ghostSpeed = 250
+  const ghostSpeed = 275
 
   //ghost 1 location
   // const ghostOneIdx = 151
@@ -532,7 +532,7 @@ window.addEventListener('DOMContentLoaded', () => {
             ghostFour.cssClass = ghostFour.originalCssClass
   
             // reverting speed
-            ghostSpeed = speed
+            // ghostSpeed = speed
 
             //changing background colors
             body.classList.remove('body-inverse')
