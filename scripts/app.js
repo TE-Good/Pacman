@@ -17,6 +17,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const stageOneComplete = document.querySelector('.stage-one-complete')
   const gameOverScore = document.querySelector('.game-over-score')
   const stageOneScore = document.querySelector('.stage-one-score')
+  const countdownIntro = document.querySelector('.countdown')
   const win = document.querySelector('.win')
   const body = document.querySelector('body')
   const cells = []
@@ -30,7 +31,7 @@ window.addEventListener('DOMContentLoaded', () => {
   // let ghostOneTargetMove = null
   // let ghostOneTargetMove1 = null
   //points coutner
-  let points = 1470
+  let points = 0
   // character speed
   // const speed = 150
   const speed = 125
@@ -95,6 +96,9 @@ window.addEventListener('DOMContentLoaded', () => {
   let stageOneScreen = false
   let stageOneTitleCheck = false
 
+  // intro countdown setInterval
+  let introCountdownInterval = null
+
   
 
   // grid creation
@@ -148,13 +152,31 @@ window.addEventListener('DOMContentLoaded', () => {
         startScreen = false
         addGrid()
         startScreenTitle.classList.add('hidden')
-        
+        // revealing countdown
+        countdownIntro.classList.remove('hidden')
+        // grid animation
+        grid.classList.add('fadeIn')
+        grid.classList.add('intro-animation-duration')
+        // countdown timer
+        let countdown321 = 3
+        countdownIntro.textContent = countdown321
+        introCountdownInterval = setInterval(() => {
+          countdown321--
+          countdownIntro.textContent = countdown321
+        }, 1000)
+        // game start
         setTimeout(() => {
           gameState = true
           ghostOne.start()
           ghostTwo.start()
           ghostThree.start()
           ghostFour.start()
+          // clearing the countdown
+          clearInterval(introCountdownInterval)
+          grid.classList.remove('fadeIn')
+          grid.classList.remove('intro-animation-duration')
+          countdownIntro.classList.add('hidden')
+          
         }, 3000)
 
       }
@@ -168,16 +190,34 @@ window.addEventListener('DOMContentLoaded', () => {
         cells[playerIdx].classList.remove('player')
         playerIdx = 290
         cells[playerIdx].classList.add('player')
-        
+
+        // countdown timer
+        countdownIntro.classList.remove('hidden')
+        // grid animation
+        grid.classList.add('fadeIn')
+        grid.classList.add('intro-animation-duration')
+        // countdown timer
+        let countdown321 = 3
+        countdownIntro.textContent = countdown321
+        introCountdownInterval = setInterval(() => {
+          countdown321--
+          countdownIntro.textContent = countdown321
+        }, 1000)
+        //game start  
         setTimeout(() => {
           gameState = true
           ghostOne.start()
           ghostTwo.start()
           ghostThree.start()
           ghostFour.start()
-          grid.classList.add('animated')
+          //changing animations
           grid.classList.add('rotate')
           grid.classList.add('rotate360')
+          grid.classList.remove('fadeIn')
+          grid.classList.remove('intro-animation-duration')
+          // clearing the countdown
+          clearInterval(introCountdownInterval)
+          countdownIntro.classList.add('hidden')
         }, 3000)
 
       }

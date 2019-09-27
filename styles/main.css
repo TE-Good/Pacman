@@ -44,7 +44,7 @@ body {
   font-size: 30%;
   /* transition: transform 3s linear;
   transform: rotate(360deg) */
-  animation-iteration-count: infinite;
+  
 }
 
 .grid div {
@@ -176,12 +176,18 @@ body {
   float: left;
   margin: auto;
   font-size: 600%;
+  /* color: rgba(214, 139, 69, 0.8); */
+  /* color: rgb(241, 173, 45); */
+  color: black;
+  z-index: 1;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
 }
 
-.behind {
-  color: white;
+/* .behind {
+  color: black;
   font-size: 700%;
-}
+} */
 
 .stage-one-complete {
   display:flex;
@@ -212,7 +218,7 @@ body {
 
 .game-over > h1 {
   font-size: 450%;
-  animation: pulse 4s linear infinite;
+  animation: pulsing 4s linear infinite;
 }
 /* .game-over > h4 {
   animation: pulse 4s linear infinite;
@@ -228,7 +234,7 @@ body {
 }
 .win > h1 {
   font-size: 450%;
-  animation: pulse 4s linear infinite;
+  animation: pulsing 4s linear infinite;
 }
 
 .hidden {
@@ -244,6 +250,12 @@ body {
 
 .rotate360 {
   animation: rotate360 5s linear infinite;
+  animation-iteration-count: infinite;
+}
+
+.intro-animation-duration {
+  animation-delay: 1s;
+  animation-duration: 5s;
 }
 
 @keyframes rotate-pulse {
@@ -267,7 +279,7 @@ body {
   }
 }
 
-@keyframes pulse {
+@keyframes pulsing {
   0% {
     font-size: 300%;
   }
