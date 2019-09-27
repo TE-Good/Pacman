@@ -25,6 +25,18 @@ window.addEventListener('DOMContentLoaded', () => {
   let playerIdx = 290
   //intitalising player movement setInterval()
   let playerMoving = null
+
+  // music
+  // const gameMusic = new Audio('assets/Splashing_Around.mp3')
+  const gameStartSpaceMusic = new Audio('assets/success-1.wav')
+  const gameOverSound = new Audio('assets/battle-horn.wav')
+  const playerMoveSound = new Audio('assets/jump1.wav')
+  const powerPillSound = new Audio('assets/level-up.wav')
+  const winScreenSound = new Audio('assets/yells.mp3')
+  const countdownBeepSound = new Audio('assets/retro-coin-collect.wav')
+  const ghostEatSound = new Audio('assets/sfx-fail.wav')
+  const stageOneSuccessSound = new Audio('assets/success.wav')
+
   // //initalising ghost one random movement
   // let ghostOneMoving = null
   // //intialising ghoss one targeted movement
@@ -35,7 +47,7 @@ window.addEventListener('DOMContentLoaded', () => {
   // character speed
   // const speed = 150
   const speed = 125
-  let ghostSpeed = 150
+  let ghostSpeed = 250
 
   //ghost 1 location
   // const ghostOneIdx = 151
@@ -99,6 +111,10 @@ window.addEventListener('DOMContentLoaded', () => {
   // intro countdown setInterval
   let introCountdownInterval = null
 
+  // cheat used
+  let cheatOne = false
+  let cheatTwo = false
+
   
 
   // grid creation
@@ -150,17 +166,21 @@ window.addEventListener('DOMContentLoaded', () => {
       // start screen -> spacebar activation
       if (e.keyCode === 32 && startScreen) {
         startScreen = false
+        gameStartSpaceMusic.play()
+        // gameMusic.play()
         addGrid()
         startScreenTitle.classList.add('hidden')
         // revealing countdown
         countdownIntro.classList.remove('hidden')
         // grid animation
-        grid.classList.add('fadeIn')
+        grid.classList.add('fadeInUp')
         grid.classList.add('intro-animation-duration')
         // countdown timer
         let countdown321 = 3
         countdownIntro.textContent = countdown321
+        countdownBeepSound.play()
         introCountdownInterval = setInterval(() => {
+          countdownBeepSound.play()
           countdown321--
           countdownIntro.textContent = countdown321
         }, 1000)
@@ -173,17 +193,30 @@ window.addEventListener('DOMContentLoaded', () => {
           ghostFour.start()
           // clearing the countdown
           clearInterval(introCountdownInterval)
-          grid.classList.remove('fadeIn')
+          grid.classList.remove('fadeInUp')
           grid.classList.remove('intro-animation-duration')
           countdownIntro.classList.add('hidden')
           
         }, 3000)
 
       }
+      if (e.keyCode === 80 && gameState && !cheatOne){
+        points = 0
+        points += 1450
+        score.innerHTML = `Score: ${points}`
+        cheatOne = true
+      }
+      if (e.keyCode === 79 && gameState && !cheatTwo){
+        points = 1500
+        points = 2950
+        score.innerHTML = `Score: ${points}`
+        cheatTwo = true
+      }
       // stage one screen -> spacebar activation
       if (e.keyCode === 32 && stageOneScreen) {
         stageOneScreen = false
         addGrid()
+        gameStartSpaceMusic.play()
         stageOneComplete.classList.add('hidden')
         stageOneTitle.classList.add('hidden')
         stageTwoTitle.classList.remove('hidden')
@@ -194,12 +227,14 @@ window.addEventListener('DOMContentLoaded', () => {
         // countdown timer
         countdownIntro.classList.remove('hidden')
         // grid animation
-        grid.classList.add('fadeIn')
+        grid.classList.add('fadeInUp')
         grid.classList.add('intro-animation-duration')
         // countdown timer
         let countdown321 = 3
         countdownIntro.textContent = countdown321
+        countdownBeepSound.play()
         introCountdownInterval = setInterval(() => {
+          countdownBeepSound.play()
           countdown321--
           countdownIntro.textContent = countdown321
         }, 1000)
@@ -349,6 +384,7 @@ window.addEventListener('DOMContentLoaded', () => {
         cells[playerIdx].classList.add(characterClass)
         cells[playerIdx].classList.add('rotate-down')
       }
+      playerMoveSound.play()
       stageComplete(points)
     }, speed)
   }
@@ -360,6 +396,7 @@ window.addEventListener('DOMContentLoaded', () => {
         ghostThree.ghostIdx === playerIdx || ghostFour.ghostIdx === playerIdx) {
         removePreviousRotation(playerIdx)
         cells[playerIdx].classList.remove('player')
+        gameOverSound.play()
         //state to stop game
         gameState = false
         clearInterval(playerMoving)
@@ -423,6 +460,7 @@ window.addEventListener('DOMContentLoaded', () => {
         // powerModeOn = false
         clearInterval(gameOverLoop)
         points += 40
+        powerPillSound.play()
 
         // changing colours
         body.classList.add('body-inverse')
@@ -449,6 +487,7 @@ window.addEventListener('DOMContentLoaded', () => {
             // clearInterval(ghostOne.ghostOneTargetMove1)
             cells[ghostOne.ghostIdx].classList.remove(ghostOne.cssClass)
             clearInterval(ghostOne.setting10SecondTimer)
+            ghostEatSound.play()
             ghostOne.ghostIdx = 150
             ghostOne.target = 193
           }
@@ -456,6 +495,7 @@ window.addEventListener('DOMContentLoaded', () => {
             // clearInterval(ghostTwo.ghostOneTargetMove1)
             cells[ghostTwo.ghostIdx].classList.remove(ghostTwo.cssClass)
             clearInterval(ghostTwo.setting10SecondTimer)
+            ghostEatSound.play()
             ghostTwo.ghostIdx = 148
             ghostTwo.target = 186
           }
@@ -463,6 +503,7 @@ window.addEventListener('DOMContentLoaded', () => {
             // clearInterval(ghostThree.ghostOneTargetMove1)
             cells[ghostThree.ghostIdx].classList.remove(ghostThree.cssClass)
             clearInterval(ghostThree.setting10SecondTimer)
+            ghostEatSound.play()
             ghostThree.ghostIdx = 148
             ghostThree.target = 186
           }
@@ -470,6 +511,7 @@ window.addEventListener('DOMContentLoaded', () => {
             // clearInterval(ghostFour.ghostOneTargetMove1)
             cells[ghostFour.ghostIdx].classList.remove(ghostFour.cssClass)
             clearInterval(ghostFour.setting10SecondTimer)
+            ghostEatSound.play()
             ghostFour.ghostIdx = 148
             ghostFour.target = 186
           }
@@ -523,6 +565,7 @@ window.addEventListener('DOMContentLoaded', () => {
       removeGrid()
       // console.log('STAGE COMPLETE')
       stageOneComplete.classList.remove('hidden')
+      stageOneSuccessSound.play()
 
       gameState = false
       clearInterval(playerMoving)
@@ -537,11 +580,25 @@ window.addEventListener('DOMContentLoaded', () => {
       ghostFour.reset()
 
 
+      // // repopulating pip creation
+      // cells.forEach((item, index) => {
+      //   const cell = document.createElement('section')
+      //   powerArray.includes(index) ? item.appendChild(cell).classList.add('power') : 0
+      //   return pipArray.includes(index) ? item.appendChild(cell).classList.add('pip') : 0
+      // })
       // repopulating pip creation
       cells.forEach((item, index) => {
         const cell = document.createElement('section')
-        powerArray.includes(index) ? item.appendChild(cell).classList.add('power') : 0
-        return pipArray.includes(index) ? item.appendChild(cell).classList.add('pip') : 0
+        if (powerArray.includes(index)) {
+          if (!item.children[1].classList.contains('power')) {
+            item.childen[1].classList.add('power')
+          }
+        } 
+        if (pipArray.includes(index)) {
+          if (!item.children[1].classList.contains('pip')) {
+            item.children[1].classList.add('pip')
+          }
+        } 
       })
 
       clearInterval(pacmanEat)
@@ -554,6 +611,7 @@ window.addEventListener('DOMContentLoaded', () => {
       removeGrid()
       gameState = false
       win.classList.remove('hidden')
+      winScreenSound.play()
       clearInterval(playerMoving)
       clearInterval(gameOverLoop)
       ghostOne.stop()
