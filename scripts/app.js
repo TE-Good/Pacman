@@ -3,9 +3,9 @@ console.log('JS loaded')
 window.addEventListener('DOMContentLoaded', () => {
 
   const wallArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 29, 30, 39, 40, 42, 43, 44, 45, 46, 47, 49, 50, 52, 53, 54, 55, 56, 57, 59, 60, 62, 63, 64, 65, 66, 67, 69, 70, 72, 73, 74, 75, 76, 77, 79, 80, 82, 83, 84, 85, 86, 87, 89, 90, 92, 93, 94, 95, 96, 97, 99, 100, 119, 120, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 139, 140, 147, 152, 159, 160, 161, 162, 163, 164, 165, 167, 169, 170, 172, 174, 175, 176, 177, 178, 179, 189, 190, 200, 201, 202, 203, 204, 205, 207, 212, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 227, 228, 229, 230, 231, 232, 234, 235, 236, 237, 238, 239, 240, 249, 250, 259, 260, 262, 263, 264, 265, 267, 269, 270, 272, 274, 275, 276, 277, 279, 280, 282, 283, 284, 285, 287, 292, 294, 295, 296, 297, 299, 300, 302, 303, 304, 305, 307, 308, 309, 310, 311, 312, 314, 315, 316, 317, 319, 320, 327, 328, 329, 330, 331, 332, 339, 340, 342, 343, 344, 345, 346, 347, 348, 349, 350, 351, 352, 353, 354, 355, 356, 357, 359, 360, 379, 380, 381, 382, 383, 384, 385, 386, 387, 388, 389, 390, 391, 392, 393, 394, 395, 396, 397, 398, 399]
-  const pipArray = [21, 22, 23, 24, 25, 26, 27, 28, 31, 32, 33, 34, 35, 36, 37, 38, 41, 48, 51, 58, 61, 68, 71, 78, 81, 88, 91, 98, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 121, 138, 141, 142, 143, 144, 145, 146, 153, 154, 155, 156, 157, 158, 166, 173, 186, 193, 206, 213, 226, 233, 241, 242, 243, 244, 245, 246, 247, 248, 251, 252, 253, 254, 255, 256, 257, 258, 261, 266, 268, 271, 273, 278, 281, 286, 288, 289, 290, 291, 293, 298, 301, 306, 313, 318, 321, 322, 323, 324, 325, 326, 333, 334, 335, 336, 337, 338, 341, 358, 361, 362, 363, 364, 365, 366, 367, 368, 369, 370, 371, 372, 373, 374, 375, 376, 377, 378 ]
-  const powerArray =  [21, 38, 361, 378]
-  const ghostBanned = [180, 181, 182, 183, 184, 185, 194, 195, 196 , 197, 198, 199]
+  const pipArray = [21, 22, 23, 24, 25, 26, 27, 28, 31, 32, 33, 34, 35, 36, 37, 38, 41, 48, 51, 58, 61, 68, 71, 78, 81, 88, 91, 98, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 121, 138, 141, 142, 143, 144, 145, 146, 153, 154, 155, 156, 157, 158, 166, 173, 186, 193, 206, 213, 226, 233, 241, 242, 243, 244, 245, 246, 247, 248, 251, 252, 253, 254, 255, 256, 257, 258, 261, 266, 268, 271, 273, 278, 281, 286, 288, 289, 290, 291, 293, 298, 301, 306, 313, 318, 321, 322, 323, 324, 325, 326, 333, 334, 335, 336, 337, 338, 341, 358, 361, 362, 363, 364, 365, 366, 367, 368, 369, 370, 371, 372, 373, 374, 375, 376, 377, 378]
+  const powerArray = [21, 38, 361, 378]
+  const ghostBanned = [180, 181, 182, 183, 184, 185, 194, 195, 196, 197, 198, 199]
   //grid width
   const width = 20
   const grid = document.querySelector('.grid')
@@ -47,7 +47,7 @@ window.addEventListener('DOMContentLoaded', () => {
   // character speed
   // const speed = 150
   const speed = 125
-  const ghostSpeed = 275
+  const ghostSpeed = 225
 
   //ghost 1 location
   // const ghostOneIdx = 151
@@ -115,7 +115,7 @@ window.addEventListener('DOMContentLoaded', () => {
   let cheatOne = false
   let cheatTwo = false
 
-  
+
 
   // grid creation
   for (let i = 0; i < width ** 2; i++) {
@@ -135,7 +135,7 @@ window.addEventListener('DOMContentLoaded', () => {
   cells.forEach((item, index) => {
     return ghostBanned.includes(index) ? item.classList.add('ghost-banned') : 0
   })
-  
+
   // inner class appending creation
   cells.forEach((item, index) => {
     const cell = document.createElement('section')
@@ -196,17 +196,17 @@ window.addEventListener('DOMContentLoaded', () => {
           grid.classList.remove('fadeInUp')
           grid.classList.remove('intro-animation-duration')
           countdownIntro.classList.add('hidden')
-          
+
         }, 3000)
 
       }
-      if (e.keyCode === 80 && gameState && !cheatOne){
+      if (e.keyCode === 80 && gameState && !cheatOne) {
         points = 0
-        points += 1450
+        points += 1490
         score.innerHTML = `Score: ${points}`
         cheatOne = true
       }
-      if (e.keyCode === 79 && gameState && !cheatTwo){
+      if (e.keyCode === 79 && gameState && !cheatTwo) {
         points = 1500
         points = 2950
         score.innerHTML = `Score: ${points}`
@@ -257,16 +257,16 @@ window.addEventListener('DOMContentLoaded', () => {
 
       }
       if (gameState === true) {
-    
+
         // console.log(e.keyCode)
         // cells[playerIdx].classList.remove('player')
-    
+
         switch (e.keyCode) {
           //left
-          case 37: 
+          case 37:
             if (!cells[playerIdx - 1].classList.contains('wall')) movementPlayer(37, 'player')
             break
-          case 65: 
+          case 65:
             if (!cells[playerIdx - 1].classList.contains('wall')) movementPlayer(37, 'player')
             break
           //up
@@ -284,10 +284,10 @@ window.addEventListener('DOMContentLoaded', () => {
             if (!cells[playerIdx + 1].classList.contains('wall')) movementPlayer(39, 'player')
             break
           //down
-          case 40: 
+          case 40:
             if (!cells[playerIdx + width].classList.contains('wall')) movementPlayer(40, 'player')
             break
-          case 83: 
+          case 83:
             if (!cells[playerIdx + width].classList.contains('wall')) movementPlayer(40, 'player')
             break
         }
@@ -303,8 +303,8 @@ window.addEventListener('DOMContentLoaded', () => {
     clearInterval(playerMoving)
     //loop
     playerMoving = setInterval(() => {
-      
-    
+
+
       // moving left
       if (keyCode === 37) {
         // console.log(`player index ${playerIdx}`)
@@ -392,7 +392,7 @@ window.addEventListener('DOMContentLoaded', () => {
   gameOverLooper()
   function gameOverLooper() {
     gameOverLoop = setInterval(() => {
-      if (ghostOne.ghostIdx === playerIdx || ghostTwo.ghostIdx === playerIdx || 
+      if (ghostOne.ghostIdx === playerIdx || ghostTwo.ghostIdx === playerIdx ||
         ghostThree.ghostIdx === playerIdx || ghostFour.ghostIdx === playerIdx) {
         removePreviousRotation(playerIdx)
         cells[playerIdx].classList.remove('player')
@@ -431,31 +431,28 @@ window.addEventListener('DOMContentLoaded', () => {
   }
   function removeGrid() {
     grid.classList.add('hidden')
-    if (!stageOneTitle.classList.contains('hidden'))stageOneTitle.classList.add('hidden')
-    if (!stageTwoTitle.classList.contains('hidden'))stageTwoTitle.classList.add('hidden')
+    if (!stageOneTitle.classList.contains('hidden')) stageOneTitle.classList.add('hidden')
+    if (!stageTwoTitle.classList.contains('hidden')) stageTwoTitle.classList.add('hidden')
     score.classList.add('hidden')
   }
-  
+
 
   function pipCount() {
     // if the cell has a child
-    if (cells[playerIdx].children[1]){
+    if (cells[playerIdx].children[1]) {
       // if that child contains pip
       if (cells[playerIdx].children[1].classList.contains('pip')) {
         //increment a point
         points += 10
         // update the score
         score.innerHTML = `Score:${points}`
-        // console.log(`You have ${points} points!`)
         return cells[playerIdx].children[1].classList.remove('pip')
       }
     } else return 0
-    // } else return console.log('false')
-    // return cells[playerIdx].classList.remove('.pip')
   }
 
   function powerCount() {
-    if (cells[playerIdx].children[1]){
+    if (cells[playerIdx].children[1]) {
       if (cells[playerIdx].children[1].classList.contains('power')) {
         // powerModeOn = false
         clearInterval(gameOverLoop)
@@ -471,7 +468,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
         //halving the speed
         // ghostSpeed = speed
-        console.log(ghostSpeed)
 
         cells[ghostOne.ghostIdx].classList.remove(ghostOne.cssClass)
         cells[ghostTwo.ghostIdx].classList.remove(ghostTwo.cssClass)
@@ -517,7 +513,7 @@ window.addEventListener('DOMContentLoaded', () => {
           }
         }, 1)
         // power mode timer 
-        if (powerModeOn === false){
+        if (powerModeOn === false) {
           powerModeOn = true
           // powerModeTimer = setTimeout(() => {
           // might make an end method for my ghost class instead of these lines
@@ -530,7 +526,7 @@ window.addEventListener('DOMContentLoaded', () => {
             ghostTwo.cssClass = ghostTwo.originalCssClass
             ghostThree.cssClass = ghostThree.originalCssClass
             ghostFour.cssClass = ghostFour.originalCssClass
-  
+
             // reverting speed
             // ghostSpeed = speed
 
@@ -545,7 +541,7 @@ window.addEventListener('DOMContentLoaded', () => {
             gameOverLooper()
             powerModeOn = false
           }, powerModeDuration)
-          
+
         } else {
           powerModeDuration += 5000
         }
@@ -593,12 +589,12 @@ window.addEventListener('DOMContentLoaded', () => {
           if (!item.children[1].classList.contains('power')) {
             item.childen[1].classList.add('power')
           }
-        } 
+        }
         if (pipArray.includes(index)) {
           if (!item.children[1].classList.contains('pip')) {
             item.children[1].classList.add('pip')
           }
-        } 
+        }
       })
 
       clearInterval(pacmanEat)
@@ -646,7 +642,7 @@ window.addEventListener('DOMContentLoaded', () => {
       this.targetStored = target
       this.cssClass = cssClass
       this.speed = speed
-  
+
       this.ghostX = this.ghostIdx % width
       this.ghostY = Math.floor(this.ghostIdx / width)
       this.pacY = Math.abs(Math.floor(playerIdx / width))
@@ -665,8 +661,8 @@ window.addEventListener('DOMContentLoaded', () => {
     initalPlacement() {
       cells[this.ghostIdx].classList.add(this.cssClass)
     }
-  
-  
+
+
     // Main ghost movement function
     start() {
       clearInterval(this.ghostOneTargetMove1)
@@ -696,7 +692,7 @@ window.addEventListener('DOMContentLoaded', () => {
               } else if (yDifference < 0 && this.ghostWallCheck('up')) {
                 // console.log(13)
                 this.ghostUpByOne()
-              } 
+              }
             }
             if (xDifference < 0) {
               if (this.ghostWallCheck('left')) {
@@ -760,9 +756,9 @@ window.addEventListener('DOMContentLoaded', () => {
           } else this.forceMove(xDifference, yDifference)
         }
         this.lastghostIdx = this.ghostIdx
-      }, speed)
+      }, ghostSpeed)
     }
-    
+
     chasePac() {
       if (!powerMode) {
         // const ghostY = Math.abs(Math.floor(this.ghostIdx / width))
@@ -771,19 +767,19 @@ window.addEventListener('DOMContentLoaded', () => {
         // const pacX = Math.abs(playerIdx % width)
         // let pacGhostYDifference = null
         // let pacGhostXDifference = null
-      
+
         if (this.ghostY > this.pacY) {
           this.pacGhostYDifference = this.ghostY - this.pacY
         } else this.pacGhostYDifference = this.pacY - this.ghostY
         if (this.ghostX > this.pacX) {
           this.pacGhostXDifference = this.ghostX - this.pacX
         } else this.pacGhostXDifference = this.pacX - this.ghostX
-        if (this.pacGhostYDifference <= 1 || this.pacGhostXDifference <= 1){
+        if (this.pacGhostYDifference <= 1 || this.pacGhostXDifference <= 1) {
           console.log('chasing')
           this.chasing = true
           return this.target = playerIdx
         }
-      } else if (powerMode === true && this.chasing === true){
+      } else if (powerMode === true && this.chasing === true) {
         this.chasing = false
         // console.log('chase stopped')
         clearInterval(this.setting10SecondTimer)
@@ -794,7 +790,7 @@ window.addEventListener('DOMContentLoaded', () => {
         return 0
       }
     }
-    
+
     tenSecondReassign() {
       clearInterval(this.setting10SecondTimer)
       this.setting10SecondTimer = setTimeout(() => {
@@ -804,21 +800,21 @@ window.addEventListener('DOMContentLoaded', () => {
         return this.start()
       }, 5000)
     }
-    
-    
+
+
     forceMove(xDiff, yDiff) {
       // console.log(this.availableDirectionCount())
       if (this.availableDirectionCount() === 1) {
-        if (!this.ghostWallCheck('up') && !this.ghostWallCheck('right') && !this.ghostWallCheck('left')){
+        if (!this.ghostWallCheck('up') && !this.ghostWallCheck('right') && !this.ghostWallCheck('left')) {
           // console.log('f11')
           this.ghostDownByOne()
-        } else if (!this.ghostWallCheck('up') && !this.ghostWallCheck('down') && !this.ghostWallCheck('right')){
+        } else if (!this.ghostWallCheck('up') && !this.ghostWallCheck('down') && !this.ghostWallCheck('right')) {
           // console.log('f12')
           this.ghostLeftByOne()
-        } else if (!this.ghostWallCheck('up') && !this.ghostWallCheck('left') && !this.ghostWallCheck('down')){
+        } else if (!this.ghostWallCheck('up') && !this.ghostWallCheck('left') && !this.ghostWallCheck('down')) {
           // console.log('f13')
           this.ghostRightByOne()
-        } else if (!this.ghostWallCheck('right') && !this.ghostWallCheck('left') && !this.ghostWallCheck('down')){
+        } else if (!this.ghostWallCheck('right') && !this.ghostWallCheck('left') && !this.ghostWallCheck('down')) {
           // console.log('f14')
           this.ghostUpByOne()
         }
@@ -852,29 +848,29 @@ window.addEventListener('DOMContentLoaded', () => {
         if (random3 === 1 && this.ghostWallCheck('down')) this.ghostDownByOne()
         if (random3 === 2 && this.ghostWallCheck('right')) this.ghostRightByOne()
         if (random3 === 2 && this.ghostWallCheck('left')) this.ghostLeftByOne()
-    
+
       }
     }
-    
-    
-    
-    
+
+
+
+
     // randomTarget()
     randomTarget() {
       this.random399 = null
-      while (!pipArray.includes(this.random399)){
+      while (!pipArray.includes(this.random399)) {
         this.random399 = Math.floor(Math.random() * 399)
       }
       this.target = this.random399
       // console.log('target moved to', this.target)
       return this.target
     }
-    
+
     ghostWallCheck(move) {
       switch (move) {
         //left
-        case 'left': 
-          if (!cells[this.ghostIdx - 1].classList.contains('wall') && !cells[this.ghostIdx - 1].classList.contains('ghost-banned')  && this.lastPosition !== 'left') return true
+        case 'left':
+          if (!cells[this.ghostIdx - 1].classList.contains('wall') && !cells[this.ghostIdx - 1].classList.contains('ghost-banned') && this.lastPosition !== 'left') return true
           else return false
         //down
         case 'down':
@@ -882,27 +878,27 @@ window.addEventListener('DOMContentLoaded', () => {
           else return false
         //right
         case 'right':
-          if (!cells[this.ghostIdx + 1].classList.contains('wall') && !cells[this.ghostIdx + 1].classList.contains('ghost-banned')  && this.lastPosition !== 'right') return true
+          if (!cells[this.ghostIdx + 1].classList.contains('wall') && !cells[this.ghostIdx + 1].classList.contains('ghost-banned') && this.lastPosition !== 'right') return true
           else return false
         //up
         case 'up':
-          if (!cells[this.ghostIdx - width].classList.contains('wall')  && this.lastPosition !== 'up') return true
+          if (!cells[this.ghostIdx - width].classList.contains('wall') && this.lastPosition !== 'up') return true
           else return false
       }
     }
-  
+
     availableDirectionCount() {
       this.wallCount = 0
       if (this.ghostWallCheck('up')) this.wallCount++
       if (this.ghostWallCheck('left')) this.wallCount++
       if (this.ghostWallCheck('down')) this.wallCount++
       if (this.ghostWallCheck('right')) this.wallCount++
-      
+
       return this.wallCount
     }
-    
+
     //direction based upon this.target location
-    ghostYDirection(){
+    ghostYDirection() {
       const targetY = Math.floor(this.target / width)
       //GhostY > targetY ?
       if (Math.floor(this.ghostIdx / width) > Math.floor(this.target / width)) {
@@ -913,7 +909,7 @@ window.addEventListener('DOMContentLoaded', () => {
       } else return 0
     }
     //direction based upon this.target location
-    ghostXDirection(){
+    ghostXDirection() {
       const targetX = this.target % width
       //ghostX > targetX
       if ((this.ghostIdx % width) > (this.target % width)) {
@@ -936,7 +932,7 @@ window.addEventListener('DOMContentLoaded', () => {
       this.target = this.targetStored
       cells[this.ghostIdx].classList.add(this.cssClass)
     }
-    
+
     // GHOST INDIVIDUAL MOVEMENTS
     ghostUpByOne(clearIntervalFunctionName) {
       this.removePreviousRotation(this.ghostIdx)
@@ -994,13 +990,13 @@ window.addEventListener('DOMContentLoaded', () => {
       if (this.ghostIdx === 180) this.ghostIdx = 199
       cells[this.ghostIdx].classList.add(this.cssClass)
     }
-    
+
   } // END OF CLASS
-  
+
   const ghostOne = new Ghost(28, 193, 'ghost-one', ghostSpeed)
   const ghostTwo = new Ghost(31, 186, 'ghost-two', ghostSpeed)
   const ghostThree = new Ghost(21, 193, 'ghost-three', ghostSpeed)
-  const ghostFour = new Ghost(38,  186, 'ghost-four', ghostSpeed)
+  const ghostFour = new Ghost(38, 186, 'ghost-four', ghostSpeed)
   ghostOne.initalPlacement()
   ghostTwo.initalPlacement()
   ghostThree.initalPlacement()
@@ -1010,9 +1006,9 @@ window.addEventListener('DOMContentLoaded', () => {
   // ghostThree.start()
   // ghostFour.start()
 
-  
-  
 
-  
+
+
+
 
 }) // END OF DOMContentLoaded
