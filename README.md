@@ -12,6 +12,8 @@
 ## Overview
 Pacman is a game where you play within a rigid game space and you must eat all pips to complete the stage and progress. Meanwhile, making sure to avoid the ghosts will try to stop your game.
 
+Game link: https://te-good.github.io/pacman/
+
 ## Instructions
 1. Press space bar to begin.
 2. Use the arrow keys to move up, down, left, and right.
