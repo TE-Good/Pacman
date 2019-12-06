@@ -64,7 +64,7 @@ ghostWallCheck(move) {
   }
 }
 ```
-*Example of random target acquisition by the ghost to move to. Also, the function to check whether a direction it is trying to travel is actionable.*
+*Example of random grid target acquisition by the ghost. Also, the function to check whether a direction it is trying to travel is actionable.*
 
 ## Challenges
 This was my debut programming project, and so there were meany obstactles that I naviagated. The logic behind moving the ghosts was a big hurdle owing to giving them the ability to chase. It took me a while, and if I were to go back now I think it could be refactored and made a lot simpler.
