@@ -862,7 +862,6 @@ window.addEventListener('DOMContentLoaded', () => {
         this.random399 = Math.floor(Math.random() * 399)
       }
       this.target = this.random399
-      // console.log('target moved to', this.target)
       return this.target
     }
 
